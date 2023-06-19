@@ -1,7 +1,7 @@
 %nprocshared=10
 #n HF 6-31G* opt
 
-tests/1-1.mol2
+input/1-1.mol2
 
 2 1
 C          6.53130       -2.93600        0.81370
