@@ -1,8 +1,10 @@
 #/usr/bin/env python
 
 import argparse
+import operator
 
 from gbsa import *
+
 
 def create_resp1_file_row(row):
 
@@ -10,13 +12,26 @@ def create_resp1_file_row(row):
 
         ligname = ligname.lower()
 
-        infile = ligname + '_dock.mol2'
+        infile = 'dock_conf/' + ligname + '_dock_best.sdf'
 
-        outfile = ligname + '_opt.gau'
+        outfile = 'resp/' + ligname + '_opt.gau'
 
         charge = get_charge(infile)
 
         create_resp1_file(infile, outfile, charge, cpu=10)
+
+
+def create_resp1_file_row_simple(row):
+
+    ligname = row['ligname']
+
+    infile = 'dock_conf/' + ligname + '_dock_best.sdf'
+
+    outfile = 'resp/' + ligname + '_opt.gau'
+
+    charge = get_charge(infile)
+
+    create_resp1_file(infile, outfile, charge, cpu=10)
 
 
 def check_resp1_output_row(row):
@@ -145,47 +160,54 @@ def rename_ligands(row):
         os.system(cmd)
 
 
+def print_ligand(row):
+
+    print(row['ligname'])
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run gbsa.py')
+
+    # Required arguments
     parser.add_argument('-f','--function', help='Function name to run',required=True)
-    parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon',required=True)
+    parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon if using pandas option, otherwise space separated list of ligand names',required=True)
+
+    # Optional arguments
     parser.add_argument('-o','--output', help='Output file name',required=False)
+    parser.add_argument('--pandas', action='store_true', help='Apply Pandas function row by row', required=False)
 
     args = parser.parse_args()
 
     if args.input == args.output:
         os.system(f'cp {args.input} {args.input}.bk')
 
-    df = pd.read_csv(args.input, sep=';')
+    if args.pandas:
+        df = pd.read_csv(args.input, sep=';')
 
-    #df = df.loc[df['Covalent'] == False]
+        #df = df.loc[df['Covalent'] == False]
 
-    #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
+        #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 
-    #df.sort_values(by='Row', inplace=True)
+        #df.sort_values(by='Row', inplace=True)
 
-    #df = df.head(n=20)
+        #df = df.head(n=20)
 
-    df[args.function] = df.apply(eval(args.function), axis=1)
+        df[args.function] = df.apply(eval(args.function), axis=1)
 
-    # remove added column if function has None as output
-    col = df[args.function].tolist()
+        # remove added column if function has None as output
+        col = df[args.function].tolist()
 
-    if len(set(col)) == 1 and col[0] is None:
-        df.drop([args.function], axis=1, inplace=True)
+        if len(set(col)) == 1 and col[0] is None:
+            df.drop([args.function], axis=1, inplace=True)
 
-    if args.output is not None:
-        df.to_csv(args.output, sep=';', index=False)
+        if args.output is not None:
+            df.to_csv(args.output, sep=';', index=False)
 
-    print(df)
+    else:
 
-"""
-    df[args.function] = df.apply(eval(args.function), axis=1)
+        df = pd.DataFrame(args.input.split(), columns=['ligname'])
 
-    # remove added column if function has None as output
-    col = df[args.function].tolist()
+        print(df)
 
-    if len(set(col)) == 1 and col[0] is None:
-        df.drop([args.function], axis=1, inplace=True)
-"""
+        df.apply(eval(args.function), axis=1)

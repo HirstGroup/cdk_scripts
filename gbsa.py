@@ -84,7 +84,7 @@ def create_resp1_file(infile, outfile, charge, cpu=1):
     with open(outfile, 'w') as f:
         f.write(string)
 
-    os.system(f'obabel -imol2 {infile} -oxyz | tail -n+3 >> {outfile}')
+    os.system(f'obabel {infile} -oxyz | tail -n+3 >> {outfile}')
 
     with open(outfile, 'a') as f:
         f.write('\n')

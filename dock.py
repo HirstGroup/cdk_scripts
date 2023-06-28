@@ -311,8 +311,13 @@ def get_first_mol2(infile, outfile):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run gbsa.py')
+
+    # Required arguments
     parser.add_argument('-f','--function', help='Function name to run',required=True)
     parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon',required=True)
+
+    # Optional argumenets
+    parser.add_argument('-n','--name', help='Name of column for output file',required=False)
     parser.add_argument('-o','--output', help='Output file name',required=False)
 
     args = parser.parse_args()
@@ -330,13 +335,18 @@ if __name__ == '__main__':
 
     #df.head(n=15).apply(generate_mol2_row, axis=1)
 
-    df[args.function] = df.apply(eval(args.function), axis=1)
+    if args.name is not None:
+        name = args.name
+    else:
+        name = args.function
+
+    df[name] = df.apply(eval(args.function), axis=1)
 
     # remove added column if function has None as output
-    col = df[args.function].tolist()
+    col = df[name].tolist()
 
     if len(set(col)) == 1 and col[0] is None:
-        df.drop([args.function], axis=1, inplace=True)
+        df.drop([name], axis=1, inplace=True)
 
     if args.output is not None:
         df.to_csv(args.output, sep=';', index=False)
