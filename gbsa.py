@@ -326,6 +326,8 @@ def get_neutral_expression(tleap_output):
     expression: command to neutralize complex in tleap
     """
 
+    charge = 0
+
     for line in tleap_output:
         if 'WARNING: The unperturbed charge of the unit:' in line: charge = float(line.split()[7])
 

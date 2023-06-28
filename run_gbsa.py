@@ -177,8 +177,11 @@ def run_tleap_simple(row):
     run(f'mkdir -p gbsa/{ligname}')
 
     os.chdir(f'gbsa/{ligname}')
+    os.system('pwd')
 
-    run(f'cp ../resp/{ligname}_resp_crd .')
+    ligand = f'{ligname}_resp_crd.mol2'
+
+    run(f'cp ../resp/{ligand} .')
 
     receptor = '../../6td3_E_F_protein.pdb'
 
