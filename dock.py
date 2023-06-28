@@ -238,7 +238,7 @@ def parse_dock_row(row):
 
     for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = lig.lower()
+        ligname = LIG.lower()
 
         score_list.append(parse_dock(f'dock_conf/{ligname}_confs_dock_best.out'))
 
@@ -309,7 +309,17 @@ def get_first_mol2(infile, outfile):
 
 if __name__ == '__main__':
 
-    df = pd.read_csv('Nottingham_data14.csv', sep=';')
+    parser = argparse.ArgumentParser(description='Run gbsa.py')
+    parser.add_argument('-f','--function', help='Function name to run',required=True)
+    parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon',required=True)
+    parser.add_argument('-o','--output', help='Output file name',required=False)
+
+    args = parser.parse_args()
+
+    if args.input == args.output:
+        os.system(f'cp {args.input} {args.input}.bk')
+
+    df = pd.read_csv(args.input, sep=';')
 
     #df.sort_values(by='Row', inplace=True)
 
@@ -319,11 +329,16 @@ if __name__ == '__main__':
 
     #df.head(n=15).apply(generate_mol2_row, axis=1)
 
-    df.apply(parse_dock_row, axis=1)
+    df[args.function] = df.apply(eval(args.function), axis=1)
 
-    #df.apply(protonate_mol2_row, axis=1)
+    # remove added column if function has None as output
+    col = df[args.function].tolist()
 
-    df.to_csv('Nottingham_data15.csv', sep=';', index=False)
+    if len(set(col)) == 1 and col[0] is None:
+        df.drop([args.function], axis=1, inplace=True)
+
+    if args.output is not None:
+        df.to_csv(args.output, sep=';', index=False)
 
 
         
