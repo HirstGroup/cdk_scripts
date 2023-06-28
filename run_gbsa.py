@@ -89,7 +89,7 @@ def create_resp3_file_row(row):
 
     for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = ligname.lower()
+        ligname = LIG.lower()
 
         infile = 'gbsa/resp/' + ligname + '_esp.log'
 
