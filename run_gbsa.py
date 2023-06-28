@@ -74,9 +74,9 @@ def get_charge_row(row):
 
 def create_resp2_file_row(row):
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = LIG.lower()
 
         infile = 'gbsa/resp/' + ligname + '_opt.log'
 
