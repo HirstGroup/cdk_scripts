@@ -200,7 +200,7 @@ def create_resp3_file(infile, outfile1, outfile2, auxfile, resname):
 
     run(f'antechamber -i {infile} -fi gout -gv 1 -o {outfile1} -fo mol2 -c resp -rn {resname} -dr no')
 
-    run(f'antechamber -i {outfile1} -fi mol2 -o {outfile2} -fo mol2 -a {auxfile} -ao crd')
+    run(f'antechamber -i {outfile1} -fi mol2 -o {outfile2} -fo mol2 -a {auxfile} -ao crd -dr no')
 
     os.system('rm ANTECHAMBER* ATOMTYPE.INF esout punch qout QOUT')
 
