@@ -52,7 +52,7 @@ def generate_mol2_row(row):
         protonate_mol2('%s-%s-3d.sdf' %(row['Row'], x+1), '%s-%s.mol2' %(row['Row'], x+1))
 
 
-def split_sdf(input):
+def split_sdf(input, max_n=None):
     """
     Split SDF file into separate files, named as _n.sdf counting from 0
 
@@ -60,6 +60,8 @@ def split_sdf(input):
     ----------
     input: string
         name of input SDF file
+    max_n: int
+        maximum number of structures to extract
 
 
     Returns
@@ -85,6 +87,9 @@ def split_sdf(input):
                 n += 1
                 n_files += 1
                 new = True
+
+                if n_files == max_n:
+                    break
 
         outfile.close()
 
@@ -250,7 +255,7 @@ def parse_dock_row(row):
 
 def get_dock_conformation(row):
     """
-    Extract first mol2 structure from docking output
+    Extract first SDF structure from docking output
     into a new file for each row
 
     Parameters
@@ -259,17 +264,16 @@ def get_dock_conformation(row):
 
     Returns
     -------
-    None (creates mol2 file)
+    None (creates sdf file)
     """
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = LIG.lower()
 
-        infile = 'dock/6td3_%s_dock.mol2' %ligname
-        outfile = 'dock/6td3_%s_dock_1.mol2' %ligname
+        infile = 'dock_conf/%s_confs_dock_best.sdf' %ligname
 
-        get_first_mol2(infile, outfile)
+        split_sdf(infile, max_n=1)
 
 
 def get_first_mol2(infile, outfile):
