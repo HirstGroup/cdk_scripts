@@ -25,7 +25,7 @@ def create_resp1_file_row_simple(row):
 
     ligname = row['ligname']
 
-    infile = 'dock_conf/' + ligname + 'confs_dock_best.sdf'
+    infile = 'dock_conf/' + ligname + '_confs_dock_best.sdf'
 
     outfile = 'gbsa/resp/' + ligname + '_opt.gau'
 
