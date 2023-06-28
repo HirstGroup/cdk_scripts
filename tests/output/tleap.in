@@ -1,0 +1,7 @@
+source leaprc.gaff
+loadamberparams 1-1_gas.frcmod
+loadamberparams frcmod.ionsjc_tip3p
+complex = loadMol2 1-1_gas.mol2
+set default PBRadii mbondi2
+saveAmberParm complex 1-1_gas.parm7 1-1_gas.rst7
+quit

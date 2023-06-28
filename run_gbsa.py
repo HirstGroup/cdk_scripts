@@ -1,16 +1,18 @@
+#/usr/bin/env python
+
 import argparse
 
 from gbsa import *
 
 def create_resp1_file_row(row):
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, ligname in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = ligname.lower()
 
-        infile = ligname + '.mol2'
+        infile = ligname + '_dock.mol2'
 
-        outfile = 'resp/' + ligname + '_opt.gau'
+        outfile = ligname + '_opt.gau'
 
         charge = get_charge(infile)
 
@@ -126,12 +128,29 @@ def number_to_resname(number):
     return resname
 
 
+def rename_ligands(row):
+
+    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+
+        name = '%s-%s' %(row['Row'], x+1)
+
+        newname = row['resname_list'].split('&')[x].lower()
+
+        cmd = f'rename "s/{name}/{newname.lower()}/" *_{name}_*.*'
+
+        #cmd = f'mv {name}-3d.sdf {newname}-3d.sdf'
+
+        print(cmd)
+
+        os.system(cmd)
+
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run gbsa.py')
     parser.add_argument('-f','--function', help='Function name to run',required=True)
     parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon',required=True)
-    parser.add_argument('-o','--output', help='Output file name',required=True)
+    parser.add_argument('-o','--output', help='Output file name',required=False)
 
     args = parser.parse_args()
 
@@ -140,9 +159,24 @@ if __name__ == '__main__':
 
     df = pd.read_csv(args.input, sep=';')
 
-    df = make_resname(df)
+    #df = df.loc[df['Covalent'] == False]
 
-    df.to_csv(args.output, sep=';', index=False)
+    #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
+
+    #df.sort_values(by='Row', inplace=True)
+
+    #df = df.head(n=20)
+
+    df[args.function] = df.apply(eval(args.function), axis=1)
+
+    # remove added column if function has None as output
+    col = df[args.function].tolist()
+
+    if len(set(col)) == 1 and col[0] is None:
+        df.drop([args.function], axis=1, inplace=True)
+
+    if args.output is not None:
+        df.to_csv(args.output, sep=';', index=False)
 
     print(df)
 

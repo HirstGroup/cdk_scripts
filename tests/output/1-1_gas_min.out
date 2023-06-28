@@ -1,0 +1,201 @@
+
+          -------------------------------------------------------
+          Amber 21 SANDER                              2021
+          -------------------------------------------------------
+
+| Run on 06/21/2023 at 17:59:58
+
+|   Executable path: sander
+| Working directory: /home/pczbf/cdk_scripts/tests/output
+|          Hostname: Unknown
+  [-O]verwriting output
+
+File Assignments:
+|  MDIN: min.in                                                                
+| MDOUT: 1-1_gas_min.out                                                       
+|INPCRD: 1-1_gas.rst7                                                          
+|  PARM: 1-1_gas.parm7                                                         
+|RESTRT: 1-1_gas_min.rst7                                                      
+|  REFC: refc                                                                  
+| MDVEL: mdvel                                                                 
+| MDFRC: mdfrc                                                                 
+|  MDEN: mden                                                                  
+| MDCRD: mdcrd                                                                 
+|MDINFO: mdinfo                                                                
+|  MTMD: mtmd                                                                  
+|INPDIP: inpdip                                                                
+|RSTDIP: rstdip                                                                
+|INPTRA: inptraj                                                               
+
+
+ Here is the input file:
+
+Minimization                                                                   
+ &cntrl                                                                        
+   bellymask='@1'                                                              
+   cut=999,                                                                    
+   drms=0.001,                                                                 
+   DT=0.002,                                                                   
+   ibelly=1,                                                                   
+   ig=-1,                                                                      
+   igb=5,                                                                      
+   imin=1,                                                                     
+   ioutfm=1,                                                                   
+   irest=0,                                                                    
+   maxcyc=5000,                                                                
+   ncyc=5000,                                                                  
+   NSTLIM=5000,                                                                
+   ntb=0,                                                                      
+   ntmin=1,                                                                    
+   ntp=0,                                                                      
+   ntpr=100,                                                                   
+   NTR=0,                                                                      
+   ntwe=0,                                                                     
+   ntwr=5000,                                                                  
+   ntwx=100,                                                                   
+   ntx=1,                                                                      
+ &end                                                                          
+
+--------------------------------------------------------------------------------
+   1.  RESOURCE   USE: 
+--------------------------------------------------------------------------------
+
+| Flags:                                                                        
+| New format PARM file being parsed.
+| Version =    1.000 Date = 06/21/23 Time = 16:53:06
+ NATOM  =      68 NTYPES =      11 NBONH =      29 MBONA  =      43
+ NTHETH =      65 MTHETA =      62 NPHIH =     120 MPHIA  =      91
+ NHPARM =       0 NPARM  =       0 NNB   =     379 NRES   =       1
+ NBONA  =      43 NTHETA =      62 NPHIA =      91 NUMBND =      28
+ NUMANG =      48 NPTRA  =      15 NATYP =      19 NPHB   =       0
+ IFBOX  =       0 NMXRS  =      68 IFCAP =       0 NEXTRA =       0
+ NCOPY  =       0
+
+ Implicit solvent radii are H(N)-modified Bondi radii (mbondi2)                                             
+
+|     Memory Use     Allocated
+|     Real              708384
+|     Hollerith            207
+|     Integer            23489
+|     Max Pairs              1
+|     nblistReal             0
+|     nblist Int             0
+|       Total             5626 kbytes
+
+| Note: 1-4 EEL scale factors are being read from the topology file.
+
+| Note: 1-4 VDW scale factors are being read from the topology file.
+| Duplicated    0 dihedrals
+| Duplicated    0 dihedrals
+Note: ig = -1. Setting random seed to    45548 based on wallclock time in microseconds.
+
+--------------------------------------------------------------------------------
+   2.  CONTROL  DATA  FOR  THE  RUN
+--------------------------------------------------------------------------------
+
+*****                                                                           
+
+General flags:
+     imin    =       1, nmropt  =       0
+
+Nature and format of input:
+     ntx     =       1, irest   =       0, ntrx    =       1
+
+Nature and format of output:
+     ntxo    =       2, ntpr    =     100, ntrx    =       1, ntwr    =    5000
+     iwrap   =       0, ntwx    =     100, ntwv    =       0, ntwe    =       0
+     ioutfm  =       1, ntwprt  =       0, idecomp =       0, rbornstat=      0
+
+Potential function:
+     ntf     =       1, ntb     =       0, igb     =       5, nsnb    =      25
+     ipol    =       0, gbsa    =       0, iesp    =       0
+     dielc   =   1.00000, cut     = 999.00000, intdiel =   1.00000
+     saltcon =   0.00000, offset  =   0.09000, gbalpha=    1.00000
+     gbbeta  =   0.80000, gbgamma =   4.85000, surften =   0.00500
+     rdt     =   0.00000, rgbmax  =  25.00000  extdiel =  78.50000
+     alpb  =        0
+
+Frozen or restrained atoms:
+     ibelly  =       1, ntr     =       0
+
+Energy minimization:
+     maxcyc  =    5000, ncyc    =    5000, ntmin   =       1
+     dx0     =   0.01000, drms    =   0.00100
+
+    LOADING THE BELLY ATOMS AS GROUPS
+
+     Mask @1; matches     1 atoms
+|  INFO: Old style inpcrd file read
+
+
+--------------------------------------------------------------------------------
+   3.  ATOMIC COORDINATES AND VELOCITIES
+--------------------------------------------------------------------------------
+
+*****                                                                           
+ begin time read from input coords =     0.000 ps
+
+ Number of triangulated 3-point waters found:        0
+
+--------------------------------------------------------------------------------
+   4.  RESULTS
+--------------------------------------------------------------------------------
+
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+      1       2.1116E+00     1.2067E+01     2.0582E+01     C           1
+
+ BOND    =        0.7257  ANGLE   =        0.1796  DIHED      =        0.0000
+ VDWAALS =       -0.4532  EEL     =       -2.0875  EGB        =        1.9616
+ 1-4 VDW =        1.8049  1-4 EEL =       -0.0195  RESTRAINT  =        0.0000
+
+
+                    FINAL RESULTS
+
+
+
+   NSTEP       ENERGY          RMS            GMAX         NAME    NUMBER
+     42       1.9344E+00     5.4072E-04     9.1695E-04     C           1
+
+ BOND    =        0.6324  ANGLE   =        0.0523  DIHED      =        0.0000
+ VDWAALS =       -0.4539  EEL     =       -2.0917  EGB        =        1.9636
+ 1-4 VDW =        1.8512  1-4 EEL =       -0.0195  RESTRAINT  =        0.0000
+
+--------------------------------------------------------------------------------
+   5.  TIMINGS
+--------------------------------------------------------------------------------
+
+|    Read coords time           0.00 ( 3.33% of Total)
+|    Fast Water setup           0.00 ( 0.05% of Total)
+|                Calc gb radii              0.00 (93.53% of Gen B)
+|                Calc gb diag               0.00 ( 2.30% of Gen B)
+|                Calc gb off-diag           0.00 ( 3.83% of Gen B)
+|                Other                      0.00 ( 0.34% of Gen B)
+|             Gen Born time              0.00 (100.0% of Nonbo)
+|             IPS excludes               0.00 ( 0.05% of Nonbo)
+|          Nonbond force              0.00 (93.99% of Force)
+|          Bond/Angle/Dihedral        0.00 ( 4.64% of Force)
+|          Other                      0.00 ( 1.37% of Force)
+|       Force time                 0.00 (100.0% of Runmd)
+|    Runmd Time                 0.00 (36.48% of Total)
+|    Other                      0.01 (60.13% of Total)
+| Total time                 0.01 (98.99% of ALL  )
+
+| Number of list builds   :          0
+
+| Highest rstack allocated:          0
+| Highest istack allocated:          0
+|           Job began  at 17:59:58.040  on 06/21/2023
+|           Setup done at 17:59:58.047  on 06/21/2023
+|           Run   done at 17:59:58.052  on 06/21/2023
+|     wallclock() was called     784 times
+
+|3D-RISM memory allocation summary
+|Type          Maximum        Current   
+|Integer       0.00000 GB     0.00000 GB
+|Real          0.00000 GB     0.00000 GB
+|Logical       0.00000 GB     0.00000 GB
+|Character     0.00000 GB     0.00000 GB
+|---------------------------------------
+|Total         0.00000 GB     0.00000 GB

@@ -1,0 +1,25 @@
+Minimization
+ &cntrl
+   bellymask='@1'
+   cut=999, 
+   drms=0.001,
+   DT=0.002, 
+   ibelly=1,
+   ig=-1,  
+   igb=5,
+   imin=1, 
+   ioutfm=1, 
+   irest=0, 
+   maxcyc=5000, 
+   ncyc=5000,
+   NSTLIM=5000, 
+   ntb=0, 
+   ntmin=1, 
+   ntp=0, 
+   ntpr=100, 
+   NTR=0, 
+   ntwe=0,
+   ntwr=5000, 
+   ntwx=100, 
+   ntx=1, 
+ &end

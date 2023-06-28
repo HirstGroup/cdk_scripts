@@ -7,119 +7,325 @@ import rdkit
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
+from gbsa import run
+
 def generate_3d_sdf(smi, outfile_name):
 
-	m = Chem.MolFromSmiles(smi)
+    m = Chem.MolFromSmiles(smi)
 
-	AllChem.Compute2DCoords(m)
+    AllChem.Compute2DCoords(m)
 
-	m = Chem.AddHs(m)
+    m = Chem.AddHs(m)
 
-	AllChem.EmbedMolecule(m,randomSeed=0xf00d)
+    AllChem.EmbedMolecule(m,randomSeed=0xf00d)
 
-	print(Chem.MolToMolBlock(m),file=open(outfile_name,'w+'))
+    print(Chem.MolToMolBlock(m),file=open(outfile_name,'w+'))
 
 
 def protonate_mol2(infile_name, outfile_name):
 
-	cmd = f'obabel -ph 7.4 -isdf {infile_name} -O {outfile_name}'
+    cmd = f'obabel -ph 7.4 -isdf {infile_name} -O {outfile_name}'
 
-	print(cmd)
+    print(cmd)
 
-	os.system(cmd)
+    os.system(cmd)
+
+
+def protonate_mol2_row(row):
+
+    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+
+        ligname = '%s-%s' %(row['Row'], x+1)
+
+        cmd = f'obabel -ph 7.4 -imol2 dock/6td3_{ligname}_dock_1.mol2 -O dock/6td3_{ligname}_dock_1_h.mol2'
+
+        os.system(cmd)
 
 
 def generate_mol2_row(row):
 
-	for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
 
-		generate_3d_sdf(smi, '%s-%s-3d.sdf' %(row['Row'], x+1))
+        generate_3d_sdf(smi, '%s-%s-3d.sdf' %(row['Row'], x+1))
 
-		protonate_mol2('%s-%s-3d.sdf' %(row['Row'], x+1), '%s-%s.mol2' %(row['Row'], x+1))
+        protonate_mol2('%s-%s-3d.sdf' %(row['Row'], x+1), '%s-%s.mol2' %(row['Row'], x+1))
 
+
+def split_sdf(input):
+    """
+    Split SDF file into separate files, named as _n.sdf counting from 0
+
+    Parameters
+    ----------
+    input: string
+        name of input SDF file
+
+
+    Returns
+    -------
+    n_file: int
+        total number of files created
+    """
+
+    name = input[:-4]
+
+    with open(input) as infile:
+
+        n = 0
+        n_files = 0
+        new = True
+
+        for line in infile:
+            if new:
+                outfile = open('%s_%s.sdf' %(name, n_files), 'w')
+                new = False
+            outfile.write(line)
+            if '$$$$' in line:
+                n += 1
+                n_files += 1
+                new = True
+
+        outfile.close()
+
+    return n_files
 
 def dock(ligname):
 
-	cmd = f'gnina -r 6td3_protein.pdb -l {ligname}.mol2 --autobox_ligand rc8.pdb --autobox_add 8 -o 6td3_{ligname}_dock.mol2 --log 6td3_{ligname}_dock100.out --exhaustiveness 100'
+    cmd = f'gnina -r 6td3_protein.pdb -l ligands/{ligname}.mol2 --autobox_ligand rc8.pdb --autobox_add 8 -o dockh/6td3_{ligname}_dock.sdf --log dockh/6td3_{ligname}_dock.out'
 
-	os.system(cmd)
+    os.system(cmd)
+
+
+def dock_conf(ligname, folder_in, folder_out):
+    """
+    Dock molecule generating conformers for cycles using OpenEye (gnina does not generate conformers for cycles)
+
+    Parameters
+    ----------
+    ligname: str
+        name of ligand sdf file (without extension)
+    folder_in: str
+        folder where input file is located
+    folder_out:
+        folder where output files will be written to
+
+    Returns
+    -------
+    None (writes docking sdf and out files for each conformer in output folder and then gets best conformation and writes it to *best.sdf and *best.out)
+    """
+
+    import generate_conformers_openeye
+
+    # generate conformers with OpenEye
+    generate_conformers_openeye.oe_conformer_generation2(f'{folder_in}/{ligname}', f'{folder_out}/{ligname}', tauto_sp23=False, torsion_drive=False, box_cen=None, save_mol2=True, save_conf_isomer_ids=True)
+
+    # split SDF file
+    n_files = split_sdf(f'{folder_out}/{ligname}_confs.sdf')
+
+    # dock individual SDF files
+    for i in range(n_files):
+        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock.sdf --log {folder_out}/{ligname}_confs_{i}_dock.out')
+
+
+    # get lowest energy docking conformation
+    score_list = []
+
+    for i in range(n_files):
+        score_list.append(parse_dock(f'{folder_out}/{ligname}_confs_{i}_dock.out'))
+
+    index_min = np.argmin(score_list)
+
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.sdf {folder_out}/{ligname}_confs_dock_best.sdf')
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.out {folder_out}/{ligname}_confs_dock_best.out')
+
+def write_gnina_output(score, outfile):
+    """
+    Write gnina style output file so that it can be parsed later
+
+    Parameters
+    ----------
+    score: float
+        docking score to write on output file
+    outfile: str
+        name of output file
+
+    
+    Returns
+    -------
+    None (writes output file)
+    """
+
+    with open(outfile, 'w') as f:
+
+        f.write('-----+\n')
+        f.write(f'1 {score}\n')
 
 
 def dock_row(row):
 
-	for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for ligname in row['resname_list'].split('&'):
 
-		dock('%s-%s' %(row['Row'], x+1))
+        dock_conf(f'{ligname.lower()}', 'ligands', 'dock_conf')
 
 
 def dock_parallel(df):
 
-	with open('parallel.txt', 'w') as f:
+    with open('parallel.txt', 'w') as f:
 
-		for index, row in df.iterrows():
+        for index, row in df.iterrows():
 
-			for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+            for x, smi in enumerate(row['stereoisomers_list'].split('&')):
 
-				ligname = '%s-%s' %(row['Row'], x+1)
+                ligname = '%s-%s' %(row['Row'], x+1)
 
-				f.write(f'gnina -r 6td3_protein.pdb -l {ligname}.mol2 --autobox_ligand rc8.pdb --autobox_add 8 -o 6td3_{ligname}_dock.mol2 --log 6td3_{ligname}_dock.out\n')
+                f.write(f'gnina -r 6td3_protein.pdb -l {ligname}.mol2 --autobox_ligand rc8.pdb --autobox_add 8 -o 6td3_{ligname}_dock.mol2 --log 6td3_{ligname}_dock.out\n')
 
-	os.system('parallel -j 4 -a parallel.txt')
-
-
-def parse_dock(row):
-
-	if row['Covalent'] == True:
-		return None
-
-	if pd.isnull(row['CDK12 Mean IC50 (uM)']):
-		return None
-
-	print(row['CDK12 Mean IC50 (uM)'])
-
-	score_list = []
-
-	for x, smi in enumerate(row['stereoisomers_list'].split('&')):
-
-		ligname = '%s-%s' %(row['Row'], x+1)
-
-		with open(f'6td3_{ligname}_dock100.out') as f:
-
-			sel = False
-
-			for line in f:
-
-				if sel:
-
-					score_list.append( float(line.split()[1]) )
-
-					break
-
-				if '-----+' in line:
-
-					sel = True
+    os.system('parallel -j 4 -a parallel.txt')
 
 
-	return np.mean(score_list)
+def parse_dock(infile):
+    """
+    Parse docking score from gnina output
+
+    Parameters
+    ----------
+    infile: str
+        name of input file
+
+    Returns
+    -------
+    score: float
+        docking score
+
+    """
+
+    with open(infile) as f:
+
+        sel = False
+
+        for line in f:
+
+            if sel:
+
+                return float(line.split()[1])
+
+            if '-----+' in line:
+
+                sel = True    
+
+
+def parse_dock_row(row):
+    """
+    Parse dock output row by row taking average of stereoisomers
+
+    Parameters
+    ----------
+    row: pandas row
+
+    Returns
+    -------
+    score_avg: float
+        average of docking scores for all stereoisomers
+    """
+
+    if row['Covalent'] == True:
+        return None
+
+    if pd.isnull(row['CDK12 Mean IC50 (uM)']):
+        return None
+
+    print(row['CDK12 Mean IC50 (uM)'])
+
+    score_list = []
+
+    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+
+        ligname = '%s-%s' %(row['Row'], x+1)
+
+        score_list.append(parse_dock(f'6td3_{ligname}_dock100.out'))
+
+    score_avg = np.mean(score_list)
+
+    return score_avg
+
+
+def get_dock_conformation(row):
+    """
+    Extract first mol2 structure from docking output
+    into a new file for each row
+
+    Parameters
+    ----------
+    row: pandas row
+
+    Returns
+    -------
+    None (creates mol2 file)
+    """
+
+    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+
+        ligname = '%s-%s' %(row['Row'], x+1)
+
+        infile = 'dock/6td3_%s_dock.mol2' %ligname
+        outfile = 'dock/6td3_%s_dock_1.mol2' %ligname
+
+        get_first_mol2(infile, outfile)
+
+
+def get_first_mol2(infile, outfile):
+    """
+    Get first structure from mol2 file
+
+    Parameters
+    ----------
+    infile: name of input mol2 file
+    outfile: name of output mol2 file
+
+    Returns
+    -------
+    None (creates output file)
+    """
+
+    lines = []
+
+    with open(infile) as f:
+
+        sel = False
+
+        for line in f:
+            lines.append(line)
+            
+            if sel is True:
+                if '@<TRIPOS>MOLECULE' in line:
+                    break
+
+
+            if '@<TRIPOS>MOLECULE' in line:
+                sel = True
+
+    with open(outfile, 'w') as f:
+        for line in lines:
+            f.write(line)
 
 
 if __name__ == '__main__':
 
-	df = pd.read_csv('Nottingham_data12.csv', sep=';')
+    df = pd.read_csv('Nottingham_data14.csv', sep=';')
 
-	#df.sort_values(by='Row', inplace=True)
+    #df.sort_values(by='Row', inplace=True)
 
-	#df = df.loc[df['Covalent'] == False]
+    df = df.loc[df['Covalent'] == False]
 
-	#df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
+    #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 
-	#df.head(n=15).apply(generate_mol2_row, axis=1)
+    #df.head(n=15).apply(generate_mol2_row, axis=1)
 
-	#df.apply(dock_row, axis=1)
+    df.apply(dock_row, axis=1)
 
-	df['Dock_score100'] = df.apply(parse_dock, axis=1)
+    #df.apply(protonate_mol2_row, axis=1)
 
-	df.to_csv('Nottingham_data13.csv', sep=';', index=False)
+    #df.to_csv('Nottingham_data13.csv', sep=';', index=False)
 
 
-		
+        
