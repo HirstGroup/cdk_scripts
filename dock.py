@@ -231,18 +231,16 @@ def parse_dock_row(row):
     if row['Covalent'] == True:
         return None
 
-    if pd.isnull(row['CDK12 Mean IC50 (uM)']):
-        return None
-
-    print(row['CDK12 Mean IC50 (uM)'])
+    #if pd.isnull(row['CDK12 Mean IC50 (uM)']):
+    #    return None
 
     score_list = []
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = lig.lower()
 
-        score_list.append(parse_dock(f'6td3_{ligname}_dock100.out'))
+        score_list.append(parse_dock(f'dock_conf/{ligname}_confs_dock_best.out'))
 
     score_avg = np.mean(score_list)
 
