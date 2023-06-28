@@ -172,11 +172,15 @@ def rename_ligands(row):
 
 def run_tleap_simple(ligname):
 
-    run(f'mkdir -p gbsa/{ligname}')
+    cmd = f'mkdir -p gbsa/{ligname}'
+
+    print(cmd)
+
+    run(cmd)
 
     os.chdir(f'gbsa/{ligname}')
 
-    run('cp ../resp/{ligname}_resp_crd .')
+    run(f'cp ../resp/{ligname}_resp_crd .')
 
     receptor = '../../6td3_E_F_protein.pdb'
 
