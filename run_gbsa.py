@@ -57,11 +57,11 @@ def get_charge_row(row):
 
     charge_list = []
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = LIG.lower()
 
-        infile = ligname + '.mol2'
+        infile = 'ligands/' + ligname + '.mol2'
 
         outfile = 'resp/' + ligname + '_opt.gau'
 
