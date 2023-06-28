@@ -170,7 +170,9 @@ def rename_ligands(row):
         os.system(cmd)
 
 
-def run_tleap_simple(ligname):
+def run_tleap_simple(row):
+
+    ligname = row['ligname']
 
     cmd = f'mkdir -p gbsa/{ligname}'
 
