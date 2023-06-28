@@ -14,7 +14,7 @@ def create_resp1_file_row(row):
 
         infile = 'dock_conf/' + ligname + '_dock_best.sdf'
 
-        outfile = 'resp/' + ligname + '_opt.gau'
+        outfile = 'gbsa/resp/' + ligname + '_opt.gau'
 
         charge = get_charge(infile)
 
