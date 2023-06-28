@@ -38,13 +38,13 @@ def create_resp1_file_row_simple(row):
 
 def check_resp1_output_row(row):
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = LIG.lower()
 
         infile = 'gbsa/resp/' + ligname + '_opt.log'
 
-        inchikey = get_inchikey(ligname + '.mol2')
+        inchikey = get_inchikey('ligands/' + ligname + '.mol2')
 
         check = check_resp1_output(infile, inchikey)
 
@@ -187,13 +187,13 @@ if __name__ == '__main__':
     if args.pandas:
         df = pd.read_csv(args.input, sep=';')
 
-        #df = df.loc[df['Covalent'] == False]
+        df = df.loc[df['Covalent'] == False]
 
-        #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
+        df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 
-        #df.sort_values(by='Row', inplace=True)
+        df.sort_values(by='Row', inplace=True)
 
-        #df = df.head(n=20)
+        df = df.head(n=20)
 
         df[args.function] = df.apply(eval(args.function), axis=1)
 
