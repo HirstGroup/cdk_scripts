@@ -198,9 +198,9 @@ def create_resp3_file(infile, outfile1, outfile2, auxfile, resname):
 
     assert 'Normal termination' in last_line
 
-    os.system(f'antechamber -i {infile} -fi gout -gv 1 -o {outfile1} -fo mol2 -c resp -rn {resname}')
+    run(f'antechamber -i {infile} -fi gout -gv 1 -o {outfile1} -fo mol2 -c resp -rn {resname} -dr no')
 
-    os.system(f'antechamber -i {outfile1} -fi mol2 -o {outfile2} -fo mol2 -a {auxfile} -ao crd')
+    run(f'antechamber -i {outfile1} -fi mol2 -o {outfile2} -fo mol2 -a {auxfile} -ao crd')
 
     os.system('rm ANTECHAMBER* ATOMTYPE.INF esout punch qout QOUT')
 
