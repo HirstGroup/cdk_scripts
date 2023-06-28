@@ -313,17 +313,17 @@ if __name__ == '__main__':
 
     #df.sort_values(by='Row', inplace=True)
 
-    df = df.loc[df['Covalent'] == False]
+    #df = df.loc[df['Covalent'] == False]
 
     #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 
     #df.head(n=15).apply(generate_mol2_row, axis=1)
 
-    df.apply(dock_row, axis=1)
+    df.apply(parse_dock_row, axis=1)
 
     #df.apply(protonate_mol2_row, axis=1)
 
-    #df.to_csv('Nottingham_data13.csv', sep=';', index=False)
+    df.to_csv('Nottingham_data15.csv', sep=';', index=False)
 
 
         
