@@ -89,6 +89,8 @@ def create_resp3_file_row(row):
 
     for x, LIG in enumerate(row['resname_list'].split('&')):
 
+        print(LIG)
+
         ligname = LIG.lower()
 
         infile = 'gbsa/resp/' + ligname + '_esp.log'
@@ -104,6 +106,8 @@ def create_resp3_file_row(row):
         resname = LIG
 
         create_resp3_file(infile, outfile1, outfile2, auxfile, resname)
+
+        print(LIG, 'DONE')
 
 
 def make_resname(df):
