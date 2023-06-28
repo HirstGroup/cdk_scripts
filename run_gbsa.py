@@ -38,6 +38,8 @@ def create_resp1_file_row_simple(row):
 
 def check_resp1_output_row(row):
 
+    check = True
+
     for x, LIG in enumerate(row['resname_list'].split('&')):
 
         ligname = LIG.lower()
@@ -46,9 +48,9 @@ def check_resp1_output_row(row):
 
         inchikey = get_inchikey('ligands/' + ligname + '.mol2')
 
-        check = check_resp1_output(infile, inchikey)
+        check = check and check_resp1_output(infile, inchikey)
 
-        return check
+    return check
 
 
 def get_charge_row(row):
