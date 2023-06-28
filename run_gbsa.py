@@ -87,21 +87,23 @@ def create_resp2_file_row(row):
 
 def create_resp3_file_row(row):
 
-    for x, smi in enumerate(row['stereoisomers_list'].split('&')):
+    for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        ligname = '%s-%s' %(row['Row'], x+1)
+        ligname = ligname.lower()
 
         infile = 'gbsa/resp/' + ligname + '_esp.log'
 
-        outfile = 'gbsa/resp/' + ligname + '_resp.mol2'
+        outfile1 = 'gbsa/resp/' + ligname + '_resp.mol2'
 
-        auxfile = ligname + '.mol2'
+        outfile2 = 'gbsa/resp/' + ligname + '_resp_crd.mol2'
 
-        inchikey = get_inchikey(ligname + '.mol2')
+        auxfile = 'dock_conf/' + ligname + '_confs_dock_best_0_p.mol2'
 
-        resname = inchikey[0:3]
+        inchikey = get_inchikey('ligands/' + ligname + '.mol2')
 
-        create_resp3_file(infile, outfile, auxfile, resname)
+        resname = LIG
+
+        create_resp3_file(infile, outfile1, outfile2, auxfile, resname)
 
 
 def make_resname(df):
