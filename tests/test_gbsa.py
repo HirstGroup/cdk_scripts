@@ -14,6 +14,15 @@ def test_get_charge():
 	assert charge == 2
 
 
+def test_get_charge2():
+
+	charge = get_charge('input/a01_confs_dock_best_0_p.mol2')
+
+	print(charge)
+
+	assert charge == 2
+
+
 def test_create_resp1_file():
 
 	charge = get_charge('input/1-1.mol2')
@@ -139,4 +148,3 @@ def test_run_tleap():
 
 	os.chdir('../')
 
-test_run_tleap()

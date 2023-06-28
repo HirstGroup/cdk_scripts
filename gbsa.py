@@ -54,7 +54,7 @@ def get_charge(infile):
     if len(charge_list) == 0:
         sys.exit('No charges read')
 
-    charge = int(np.around(np.mean(charge_list)))
+    charge = int(np.around(sum(charge_list)))
 
     return charge
 
