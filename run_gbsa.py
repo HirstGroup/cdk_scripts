@@ -25,7 +25,9 @@ def create_resp1_file_row_simple(row):
 
     ligname = row['ligname']
 
-    infile = 'dock_conf/' + ligname + '_confs_dock_best_0.sdf'
+    run(f'obabel dock_conf/{ligname}_confs_dock_best_0.sdf -O dock_conf/{ligname}_confs_dock_best_0.mol2')
+
+    infile = 'dock_conf/' + ligname + '_confs_dock_best_0.mol2'
 
     outfile = 'gbsa/resp/' + ligname + '_opt.gau'
 

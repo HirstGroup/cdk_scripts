@@ -42,15 +42,19 @@ def get_charge(infile):
 
     infile = open(infile)
 
-    charge = 0
+    charge_list = []
     select = False
 
     for line in infile:
         if '@<TRIPOS>' in line: select = False
-        if select: charge = charge + float(line.split()[-1])
+        if select: 
+            charge_list.append(float(line.split()[-1]))
         if '@<TRIPOS>ATOM' in line: select = True
 
-    charge = int(np.around(charge))
+    if len(charge_list) == 0:
+        sys.exit('No charges read')
+
+    charge = int(np.around(np.mean(charge_list)))
 
     return charge
 
