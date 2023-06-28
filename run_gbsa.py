@@ -174,11 +174,7 @@ def run_tleap_simple(row):
 
     ligname = row['ligname']
 
-    cmd = f'mkdir -p gbsa/{ligname}'
-
-    print(cmd)
-
-    run(cmd)
+    run(f'mkdir -p gbsa/{ligname}')
 
     os.chdir(f'gbsa/{ligname}')
 
