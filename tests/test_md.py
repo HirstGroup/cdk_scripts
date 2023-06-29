@@ -3,7 +3,7 @@ import sys
 import textwrap
 
 sys.path.append('../')
-from gbsa import *
+from md import *
 
 
 def test_run():

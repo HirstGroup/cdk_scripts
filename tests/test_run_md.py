@@ -2,7 +2,7 @@ import filecmp
 import sys
 
 sys.path.append('../')
-from run_gbsa import *
+from run_md import *
 
 from pandas.testing import assert_frame_equal
 

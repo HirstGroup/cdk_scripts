@@ -3,7 +3,7 @@
 import argparse
 import operator
 
-from gbsa import *
+from md import *
 
 
 def create_resp1_file_row(row):
