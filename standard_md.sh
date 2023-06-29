@@ -256,7 +256,7 @@ NPT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10,
 
-  nstlim = 2500000,
+  nstlim = 5000000,
   t      = 0.0,
   nscm   = 1000,
   dt     = 0.002,

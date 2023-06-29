@@ -20,10 +20,20 @@ def run(cmd):
 
     Returns
     -------
-    None (runs command)
+    output: str (and runs command)
+        std output from process run 
     """
 
-    subprocess.run(cmd, shell=True, check=True, stderr=subprocess.STDOUT)
+    try:
+        result = subprocess.run(cmd, shell=True, check=True, capture_output=True)
+        output = result.stdout.decode('utf-8')
+    except subprocess.CalledProcessError as err:
+        print(err.output.decode("utf-8"))
+        raise Exception(f'Command {cmd} failed')
+
+    print(output)
+
+    return output
 
 
 def get_charge(infile):
@@ -249,7 +259,8 @@ def run_tleap(ligand, receptor, complex):
 
     Returns
     -------
-    None (complex parm7 and rst7 files created)
+    tleap_input: str (and complex parm7 and rst7 files created)
+        tleap input file contents used 
     """
 
     ligandname = os.path.splitext(ligand)[0]
@@ -261,7 +272,7 @@ def run_tleap(ligand, receptor, complex):
     with open('tleap.in', 'w') as outfile:
         outfile.write(tleap_input)
 
-    tleap_output = os.popen(f'tleap -f tleap.in').read()
+    tleap_output = run(f'tleap -f tleap.in')
 
     neutral_expression = get_neutral_expression(tleap_output)
 
@@ -272,6 +283,8 @@ def run_tleap(ligand, receptor, complex):
             outfile.write(tleap_input)
 
         run(f'tleap -f tleap.in') 
+
+    return tleap_input
 
 
 def make_tleap_input(ligandname, ligand, receptor, complex, neutral_expression):
@@ -320,17 +333,19 @@ def get_neutral_expression(tleap_output):
 
     Parameters
     ----------
-    tleap_output: tleap_output string that will be parsed
+    tleap_output: str
+        tleap_output string that will be parsed
 
     Returns
     -------
-    expression: command to neutralize complex in tleap
+    expression: str
+        command to neutralize complex in tleap
     """
 
     charge = 0
-
-    for line in tleap_output:
-        if 'WARNING: The unperturbed charge of the unit:' in line: charge = float(line.split()[7])
+    for line in tleap_output.splitlines():
+        if 'The unperturbed charge of the unit' in line: 
+            charge = float(line.split()[6].strip(')').strip('('))
 
     charge = int(np.round(charge))
 

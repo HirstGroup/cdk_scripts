@@ -177,7 +177,6 @@ def run_tleap_simple(row):
     run(f'mkdir -p gbsa/{ligname}')
 
     os.chdir(f'gbsa/{ligname}')
-    os.system('pwd')
 
     ligand = f'{ligname}_resp_crd.mol2'
 

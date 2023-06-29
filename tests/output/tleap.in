@@ -1,7 +1,15 @@
+source leaprc.protein.ff19SB
+source leaprc.phosaa19SB
 source leaprc.gaff
-loadamberparams 1-1_gas.frcmod
+loadamberparams a01_resp.frcmod
 loadamberparams frcmod.ionsjc_tip3p
-complex = loadMol2 1-1_gas.mol2
+source leaprc.water.tip3p
+LIG = loadMol2 a01_resp.mol2
+receptor = loadPDB 6td3_E_F_protein.pdb
+complex = combine {receptor LIG}
 set default PBRadii mbondi2
-saveAmberParm complex 1-1_gas.parm7 1-1_gas.rst7
+addions2 complex CL 1
+solvatebox complex TIP3PBOX 10.0
+savepdb complex 6td3_a01-box.pdb
+saveAmberParm complex 6td3_a01.parm7 6td3_a01.rst7
 quit
