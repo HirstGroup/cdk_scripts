@@ -56,6 +56,8 @@ def test_create_resp3_file():
 	assert filecmp.cmp('input/1-1_resp.mol2', 'output/1-1_resp.mol2') is True
 
 
+test_create_resp3_file()
+
 def test_make_tleap_input1():
 
 	ligandname = '../input/a01_resp'
