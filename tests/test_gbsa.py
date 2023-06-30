@@ -57,5 +57,3 @@ def test_gbsa_arg2():
 	os.system('python ../gbsa.py -i a01 --cd output')
 
 	compare_files('input/a01_gbsa.dat', 'output/gbsa/a01_gbsa.dat', 1)
-
-test_gbsa_arg2()

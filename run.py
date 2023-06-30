@@ -1,6 +1,9 @@
 import os
 import subprocess
-from io import StringIO
+
+from functools import partial
+
+print = partial(print, flush=True)
 
 
 def run1(cmd):
