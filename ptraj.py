@@ -1,7 +1,7 @@
 import argparse
 import textwrap
 
-from md import run
+from run import run
 
 
 def center_strip(complex):
@@ -59,7 +59,14 @@ if __name__ == '__main__':
 
     # Required arguments
     parser.add_argument('-i','--input', nargs='+', help='Name of complexes to run functions on',required=True)
+    parser.add_argument('--cd', help='Name of directory to change into to run commands',required=False)
 
     args = parser.parse_args()
 
+    if args.cd:
+    	os.chdir(args.cd)
+
     center_strip(complex)
+
+    if args.cd:
+    	os.chdir('../')

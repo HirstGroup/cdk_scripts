@@ -2,7 +2,7 @@ import argparse
 import os
 import textwrap
 
-from md import run
+from run import run
 
 
 def antegbsa(complex):
