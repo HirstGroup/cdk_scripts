@@ -59,6 +59,8 @@ if __name__ == '__main__':
 
     # Required arguments
     parser.add_argument('-i','--input', help='Name of complex to run functions on',required=True)
+
+    # Optional arguments
     parser.add_argument('--cd', help='Name of directory to change into to run commands',required=False)
 
     args = parser.parse_args()
