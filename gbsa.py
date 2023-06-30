@@ -4,6 +4,7 @@ import textwrap
 
 from md import run
 
+
 def antegbsa(complex):
 	"""
 	Run ante-MMPBSA.py to prepare topolopy files for MMPBSA.py
@@ -29,6 +30,7 @@ def antegbsa(complex):
 	run(f'ante-MMPBSA.py -p {complex}.parm7 -c {complex}-complex.parm7 -r {complex}-receptor.parm7 -l {complex}-ligand.parm7 --strip-mask=:WAT:CL:NA --ligand-mask={ligandmask} --radii=mbondi2')
 
 	os.chdir('../')
+
 
 def gbsa(complex):
 	"""
