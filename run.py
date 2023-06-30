@@ -3,7 +3,7 @@ import subprocess
 from io import StringIO
 
 
-def run(cmd):
+def run1(cmd):
     """
     Run a command using subprocess and make code crash if there's an error
     and print error on console
@@ -26,5 +26,30 @@ def run(cmd):
 
     if result.returncode != 0:
         raise Exception(f"Command {cmd} failed!")
+
+    return output
+
+
+def execute(cmd):
+
+    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    for stdout_line in iter(popen.stdout.readline, ""):
+        yield stdout_line 
+    popen.stdout.close()
+    return_code = popen.wait()
+    if return_code:
+        print(popen.stderr.read())
+        raise subprocess.CalledProcessError(return_code, cmd)
+
+
+def run(cmd):
+
+    lines = []
+
+    for line in execute(cmd):
+        print(line, end="")
+        lines.append(line)
+
+    output = ''.join(lines)
 
     return output
