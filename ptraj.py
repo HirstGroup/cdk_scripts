@@ -66,7 +66,7 @@ if __name__ == '__main__':
     if args.cd:
     	os.chdir(args.cd)
 
-    center_strip(complex)
+    center_strip(args.input)
 
     if args.cd:
     	os.chdir('../')
