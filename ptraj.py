@@ -58,7 +58,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run gbsa.py')
 
     # Required arguments
-    parser.add_argument('-i','--input', nargs='+', help='Name of complexes to run functions on',required=True)
+    parser.add_argument('-i','--input', help='Name of complex to run functions on',required=True)
     parser.add_argument('--cd', help='Name of directory to change into to run commands',required=False)
 
     args = parser.parse_args()
