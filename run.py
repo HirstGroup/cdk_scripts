@@ -31,25 +31,54 @@ def run1(cmd):
 
 
 def execute(cmd):
+    """
+    Execute a command and output lines one by one
 
-    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    Parameters
+    ----------
+    cmd: str
+        command to run
+
+    Yields
+    ------
+    stdout_line: str
+        line of output command
+    """
+
+    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, bufsize=1)
+
     for stdout_line in iter(popen.stdout.readline, ""):
         yield stdout_line 
+
     popen.stdout.close()
+
     return_code = popen.wait()
+
     if return_code:
-        print(popen.stderr.read())
+        print(popen.stderr.read()) #.decode("utf-8"))
         raise subprocess.CalledProcessError(return_code, cmd)
 
 
 def run(cmd):
+    """
+    Run a command, print output lines one by one and return all output
+
+    Parameters
+    ----------
+    cmd: str
+        command to run
+
+    Returns
+    -------
+    output:
+        standard output of command
+    """
 
     lines = []
 
     for line in execute(cmd):
         print(line, end="")
         lines.append(line)
-
     output = ''.join(lines)
 
     return output

@@ -20,4 +20,9 @@ def test_run():
 	print('line20')
 	output = run('echo End')
 
-test_run()
+
+def test_run2():
+
+	run('bash test_run.sh')
+
+test_run2()

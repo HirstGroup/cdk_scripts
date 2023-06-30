@@ -1,0 +1,16 @@
+# 06/30/23 15:25:34
+# Args:  a01-complex.parm7 a01_equi_cent_strip.nc
+# Loaded topologies:
+#   a01-complex.parm7
+strip !:A01
+trajout a01_equi_cent_strip_lig.nc
+run
+quit
+# 06/30/23 15:25:51
+# Args:  a01-complex.parm7 a01_equi_cent_strip.nc
+# Loaded topologies:
+#   a01-complex.parm7
+strip :A01
+trajout a01_equi_cent_strip_rec.nc
+run
+quit

@@ -1,0 +1,6 @@
+&general 
+  interval=1, keep_files=1, netcdf=1,
+/   
+&gb 
+  igb=5, saltcon=0.100,
+/
