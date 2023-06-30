@@ -16,7 +16,7 @@ def run(cmd):
     """
 
     try:
-        result = subprocess.run(cmd, shell=True, check=True, capture_output=True)
+        result = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output = result.stdout.decode('utf-8')
     except subprocess.CalledProcessError as err:
         print(err.output.decode("utf-8"))

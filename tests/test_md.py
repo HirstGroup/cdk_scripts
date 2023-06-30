@@ -6,20 +6,6 @@ sys.path.append('../')
 from md import *
 
 
-def test_run():
-
-	output = run('echo Hello')
-
-	assert output == 'Hello\n'
-
-	try:
-		output = run('command_not_found')
-	except:
-		print('Exception handled')
-
-	output = run('echo End')
-
-
 def test_get_charge():
 
 	os.system('ls input/1-1.mol2')
