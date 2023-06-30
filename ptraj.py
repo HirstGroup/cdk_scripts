@@ -5,7 +5,7 @@ import textwrap
 from run import run
 
 
-def center_strip(complex):
+def center_strip(complex, time='equi'):
 	"""
 	Center and strip MD trajectory
 
@@ -19,7 +19,7 @@ def center_strip(complex):
 	None (creates output trajectory files)
 	"""
 
-	string = textwrap.dedent('''\n
+	string = textwrap.dedent(f'''\n
 	trajin {complex}_{time}.nc 1 last 
 	autoimage
 	trajout {complex}_{time}_cent.nc		
@@ -30,7 +30,7 @@ def center_strip(complex):
 
 	run(f'cpptraj {complex}.parm7 center.ptraj')
 
-	string = textwrap.dedent('''\
+	string = textwrap.dedent(f'''\
 	trajin {complex}_{time}_cent.nc 
 	strip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
 	rms
@@ -42,10 +42,9 @@ def center_strip(complex):
 
 	run(f'cpptraj {complex}.parm7 strip.ptraj')
 
-	string = textwrap.dedent('''\
+	string = textwrap.dedent(f'''\
 	parmstrip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
 	parmwrite out {complex}_strip.parm7
-	EOF
 	''')
 
 	with open('parmstrip.ptraj', 'w') as f:

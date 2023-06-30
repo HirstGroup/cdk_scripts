@@ -1,4 +1,7 @@
+import os
 import subprocess
+from io import StringIO
+
 
 def run(cmd):
     """
@@ -15,13 +18,13 @@ def run(cmd):
         std output from process run 
     """
 
-    try:
-        result = subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        output = result.stdout.decode('utf-8')
-    except subprocess.CalledProcessError as err:
-        print(err.output.decode("utf-8"))
-        raise Exception(f'Command {cmd} failed')
+    result = subprocess.run(cmd, shell=True, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+    print(result.stderr.decode('utf-8'))
+    output = result.stdout.decode('utf-8')
     print(output)
+
+    if result.returncode != 0:
+        raise Exception(f"Command {cmd} failed!")
 
     return output

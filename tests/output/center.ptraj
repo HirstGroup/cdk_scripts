@@ -1,0 +1,5 @@
+
+
+trajin a01_equi.nc 1 last 
+autoimage
+trajout a01_equi_cent.nc		

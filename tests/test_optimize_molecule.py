@@ -5,15 +5,7 @@ import sys
 sys.path.append('../')
 from optimize_molecule import *
 
-def compare_files(file1, file2, ignore_first):
-
-	with open(file1) as f1, open(file2) as f2:
-
-		lines1 = f1.readlines()[ignore_first:]
-		lines2 = f2.readlines()[ignore_first:]
-
-		return lines1 == lines2
-
+from compare_files import compare_files
 
 def test_antechamber():
 
