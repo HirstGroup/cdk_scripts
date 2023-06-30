@@ -78,6 +78,9 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
+    if args.cd:
+        os.chdir(args.cd)
+
     complex = args.input
 
     if args.functions is None:
@@ -89,3 +92,6 @@ if __name__ == '__main__':
             antegbsa(complex)
         if 'gbsa' in args.functions:
             gbsa(complex)
+
+    if args.cd:
+        os.chdir('../')
