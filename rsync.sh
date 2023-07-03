@@ -1,0 +1,1 @@
+rsync -rv --size-only --include='*/' --include='*strip.nc' --exclude='_*' --exclude='*.nc' --exclude='reference.frc'

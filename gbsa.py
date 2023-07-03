@@ -50,7 +50,7 @@ def gbsa(complex):
 
     string = textwrap.dedent('''\
     &general 
-      interval=1, keep_files=1, netcdf=1,
+      interval=1, netcdf=1,
     /   
     &gb 
       igb=5, saltcon=0.100,
