@@ -29,7 +29,7 @@ def create_resp1_file_row_simple(row):
 
     infile = 'dock_conf/' + ligname + '_confs_dock_best_0_p.mol2'
 
-    outfile = 'gbsa/resp/' + ligname + '_opt.gau'
+    outfile = 'md/resp/' + ligname + '_opt.gau'
 
     charge = get_charge(infile)
 
@@ -44,7 +44,7 @@ def check_resp1_output_row(row):
 
         ligname = LIG.lower()
 
-        infile = 'gbsa/resp/' + ligname + '_opt.log'
+        infile = 'md/resp/' + ligname + '_opt.log'
 
         inchikey = get_inchikey('ligands/' + ligname + '.mol2')
 
@@ -78,11 +78,26 @@ def create_resp2_file_row(row):
 
         ligname = LIG.lower()
 
-        infile = 'gbsa/resp/' + ligname + '_opt.log'
+        infile = 'md/resp/' + ligname + '_opt.log'
 
-        outfile = 'gbsa/resp/' + ligname + '_esp.gau'
+        outfile = 'md/resp/' + ligname + '_esp.gau'
 
         create_resp2_file(infile, outfile, row['charge'], cpu=8)
+
+
+def create_resp2_file_row_simple(row):
+
+    ligname = row['ligname']
+
+    infile = 'md/resp/' + ligname + '_opt.log'
+
+    outfile = 'md/resp/' + ligname + '_esp.gau'
+
+    auxfile = 'dock_conf/' + ligname + '_confs_dock_best_0_p.mol2'
+
+    charge = get_charge(auxfile)
+
+    create_resp2_file(infile, outfile, charge, cpu=8)
 
 
 def create_resp3_file_row(row):
@@ -93,11 +108,11 @@ def create_resp3_file_row(row):
 
         ligname = LIG.lower()
 
-        infile = 'gbsa/resp/' + ligname + '_esp.log'
+        infile = 'md/resp/' + ligname + '_esp.log'
 
-        outfile1 = 'gbsa/resp/' + ligname + '_resp.mol2'
+        outfile1 = 'md/resp/' + ligname + '_resp.mol2'
 
-        outfile2 = 'gbsa/resp/' + ligname + '_resp_crd.mol2'
+        outfile2 = 'md/resp/' + ligname + '_resp_crd.mol2'
 
         auxfile = 'dock_conf/' + ligname + '_confs_dock_best_0_p.mol2'
 
@@ -108,6 +123,25 @@ def create_resp3_file_row(row):
         create_resp3_file(infile, outfile1, outfile2, auxfile, resname)
 
         print(LIG, 'DONE')
+
+
+def create_resp3_file_row_simple(row):
+
+    ligname = row['ligname']
+
+    infile = 'md/resp/' + ligname + '_esp.log'
+
+    outfile1 = 'md/resp/' + ligname + '_resp.mol2'
+
+    outfile2 = 'md/resp/' + ligname + '_resp_crd.mol2'
+
+    auxfile = 'dock_conf/' + ligname + '_confs_dock_best_0_p.mol2'
+
+    resname = ligname.upper()
+
+    create_resp3_file(infile, outfile1, outfile2, auxfile, resname)
+
+    print(ligname, 'DONE')
 
 
 def make_resname(df):
@@ -174,9 +208,9 @@ def run_tleap_simple(row):
 
     ligname = row['ligname']
 
-    run(f'mkdir -p gbsa/{ligname}')
+    run(f'mkdir -p md/{ligname}')
 
-    os.chdir(f'gbsa/{ligname}')
+    os.chdir(f'md/{ligname}')
 
     ligand = f'{ligname}_resp_crd.mol2'
 
@@ -193,7 +227,10 @@ def run_tleap_simple(row):
 
 def print_ligand(row):
 
-    print(row['ligname'])
+    for LIG in row['resname_list'].split('&'):
+
+        ligname = LIG.lower()
+        print(ligname)
 
 
 if __name__ == '__main__':
@@ -222,7 +259,7 @@ if __name__ == '__main__':
 
         df.sort_values(by='Row', inplace=True)
 
-        df = df.head(n=20)
+        #df = df.head(n=20)
 
         df[args.function] = df.apply(eval(args.function), axis=1)
 
