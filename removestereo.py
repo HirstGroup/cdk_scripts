@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rdkit
 from rdkit import Chem
 from rdkit.Chem import Draw

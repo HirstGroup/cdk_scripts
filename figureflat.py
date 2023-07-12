@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import pandas as pd
 
 df = pd.read_csv('Nottingham_data10.csv', sep=';')

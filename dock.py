@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import numpy as np
 import os
@@ -253,6 +255,27 @@ def parse_dock_row(row):
     return score_avg
 
 
+def parse_dock_row_ligname(row):
+    """
+    Parse dock output for a single enantiomer (single ligname)
+
+    Parameters
+    ----------
+    row : pandas row
+
+    Returns
+    -------
+    score : float
+        Docking score
+    """
+
+    ligname = row['ligname']
+
+    score = parse_dock(f'dock_conf/{ligname}_confs_dock_best.out')
+
+    return score
+
+
 def get_dock_conformation(row):
     """
     Extract first SDF structure from docking output
@@ -333,7 +356,7 @@ if __name__ == '__main__':
 
     #df.sort_values(by='Row', inplace=True)
 
-    df = df.loc[df['Covalent'] == False]
+    #df = df.loc[df['Covalent'] == False]
 
     #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 
