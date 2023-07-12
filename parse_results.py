@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 import pandas as pd
@@ -57,7 +59,7 @@ def parse_gbsa_row(row):
 
         return results
     except:
-        print(f'No reults for {ligname}')
+        print(f'No results for {ligname}')
         return None
 
 def parse_gbsa_df(df):
@@ -72,7 +74,7 @@ def parse_gbsa_df(df):
     df: pandas df
     """
 
-    df['gbsa_results'] = df.apply(parse_gbsa_row,  axis=1)
+    df['gbsa_results'] = df.apply(parse_gbsa_row, axis=1)
 
     df = df.join(pd.json_normalize(df['gbsa_results'])).drop('gbsa_results', axis=1)
 

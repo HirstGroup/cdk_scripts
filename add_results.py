@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 import pandas as pd
@@ -5,7 +7,7 @@ import pandas as pd
 
 def get_results(row, aux):
     """
-    Get average results from each liganme into a dictionary
+    Get average results from each ligname into a dictionary
 
     Parameters
     ----------
@@ -35,7 +37,7 @@ def get_results(row, aux):
 
 def main(input, aux, output):
     """
-    Run the main function
+    Combine results for each ligname into an experimental result
 
     Parameters
     ----------
@@ -69,7 +71,7 @@ def main(input, aux, output):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='Parse results')
+    parser = argparse.ArgumentParser(description='Combine results for each ligname into an experimental result')
 
     # Required arguments
     parser.add_argument('-i','--input', help='Input file name, csv file separated by semicolon',required=True)
@@ -77,6 +79,9 @@ if __name__ == '__main__':
     parser.add_argument('-o','--output', help='Output file name',required=True)
 
     args = parser.parse_args()
+
+    if args.input == args.output:
+        os.system(f'cp {args.input} {args.input}.bk')    
 
     main(args.input, args.aux, args.output)
 
