@@ -4,7 +4,13 @@ import sys
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-input = sys.argv[1]
+import argparse
+
+parser = argparse.ArgumentParser(description='Cluster molecules using RDKit Butina algorithm')
+parser.add_argument('-i','--input', help='Input File Containing SMILES, one per line',required=True)
+parser.add_argument('-o','--output', help='Output File of cluster tuples, one per line',required=True)
+parser.add_argument('-c','--cutoff', help='Cutoff for clustering', type=float, required=True)
+args = parser.parse_args()
 
 #Define clustering setup
 def ClusterFps(fps,cutoff=0.2):
@@ -23,8 +29,14 @@ def ClusterFps(fps,cutoff=0.2):
     return cs
 
 
-fps = [AllChem.GetMorganFingerprintAsBitVect(x,2,2048) for x in Chem.SmilesMolSupplier(input) if x is not None]
+fps = [AllChem.GetMorganFingerprintAsBitVect(x,2,2048) for x in Chem.SmilesMolSupplier(args.input) if x is not None]
 
-clusters=ClusterFps(fps,cutoff=0.4)
+clusters = ClusterFps(fps, cutoff=args.cutoff)
+
+outfile = open(args.output, 'w')
+
+for i in clusters:
+    print(i)
+    outfile.write(f'{i}\n')
 
 print(len(clusters))

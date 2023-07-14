@@ -1,10 +1,10 @@
 import argparse
 
-parser = argparse.ArgumentParser(description='Make Figure of Cluster')
-parser.add_argument('-i','--input', help='Input File',required=True)
-parser.add_argument('-s','--smiles', help='Aux File',required=True)
+parser = argparse.ArgumentParser(description='Make Figure of Cluster from Taylor Butina output')
+parser.add_argument('-i','--input', help='Input File Containing Taylor Butina output',required=True)
+parser.add_argument('-s','--smiles', help='Aux File Containing smiles',required=True)
 parser.add_argument('-o','--output', help='Output File',required=True)
-parser.add_argument('-c', '--cluster', type=int, help='Cluster number',required=True)
+parser.add_argument('-c', '--cluster', type=int, help='Cluster number to make Figure of',required=True)
 args = parser.parse_args()
 
 smifile = open(args.smiles)
