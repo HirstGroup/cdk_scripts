@@ -3,6 +3,7 @@
 set -e
 
 complex=$1
+repeat=$2 # optional parameter to run repeats, e.g. _1 _2 etc
 
 IFS='_' read -r receptor lig <<< "$complex"
 
@@ -274,14 +275,14 @@ NPT MD w/No position restraints and PME (sander)
  / 
 EOF
 
-pmemd.cuda -O -i 01_min.in -c ${complex}.rst7 -p ${complex}.parm7 -o ${complex}_min1.out -r ${complex}_min1.rst7 -x ${complex}_min1.nc -ref ${complex}.rst7
-pmemd.cuda -O -i 02_min.in -c ${complex}_min1.rst7 -p ${complex}.parm7 -o ${complex}_min2.out -r ${complex}_min2.rst7 -x ${complex}_min2.nc -ref ${complex}_min1.rst7
-pmemd.cuda -O -i 03_min.in -c ${complex}_min2.rst7 -p ${complex}.parm7 -o ${complex}_min3.out -r ${complex}_min3.rst7 -x ${complex}_min3.nc -ref ${complex}_min2.rst7
-pmemd.cuda -O -i 04_min.in -c ${complex}_min3.rst7 -p ${complex}.parm7 -o ${complex}_min4.out -r ${complex}_min4.rst7 -x ${complex}_min4.nc -ref ${complex}_min3.rst7
-pmemd.cuda -O -i 05_min.in -c ${complex}_min4.rst7 -p ${complex}.parm7 -o ${complex}_min5.out -r ${complex}_min5.rst7 -x ${complex}_min5.nc -ref ${complex}_min4.rst7
+pmemd.cuda -O -i 01_min.in -c ${complex}.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min1.out -r ${complex}${repeat}_min1.rst7 -x ${complex}${repeat}_min1.nc -ref ${complex}.rst7
+pmemd.cuda -O -i 02_min.in -c ${complex}${repeat}_min1.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min2.out -r ${complex}${repeat}_min2.rst7 -x ${complex}${repeat}_min2.nc -ref ${complex}${repeat}_min1.rst7
+pmemd.cuda -O -i 03_min.in -c ${complex}${repeat}_min2.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min3.out -r ${complex}${repeat}_min3.rst7 -x ${complex}${repeat}_min3.nc -ref ${complex}${repeat}_min2.rst7
+pmemd.cuda -O -i 04_min.in -c ${complex}${repeat}_min3.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min4.out -r ${complex}${repeat}_min4.rst7 -x ${complex}${repeat}_min4.nc -ref ${complex}${repeat}_min3.rst7
+pmemd.cuda -O -i 05_min.in -c ${complex}${repeat}_min4.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min5.out -r ${complex}${repeat}_min5.rst7 -x ${complex}${repeat}_min5.nc -ref ${complex}${repeat}_min4.rst7
 
-pmemd.cuda -O -i 06_heat.in -c ${complex}_min5.rst7 -p ${complex}.parm7 -o ${complex}_heat1.out -r ${complex}_heat1.rst7 -x ${complex}_heat1.nc -ref ${complex}_min5.rst7
+pmemd.cuda -O -i 06_heat.in -c ${complex}${repeat}_min5.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_heat1.out -r ${complex}${repeat}_heat1.rst7 -x ${complex}${repeat}_heat1.nc -ref ${complex}${repeat}_min5.rst7
 
-pmemd.cuda -O -i 07_heat.in -c ${complex}_heat1.rst7 -p ${complex}.parm7 -o ${complex}_heat2.out -r ${complex}_heat2.rst7 -x ${complex}_heat2.nc -ref ${complex}_heat1.rst7
+pmemd.cuda -O -i 07_heat.in -c ${complex}${repeat}_heat1.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_heat2.out -r ${complex}${repeat}_heat2.rst7 -x ${complex}${repeat}_heat2.nc -ref ${complex}${repeat}_heat1.rst7
 
-pmemd.cuda -O -i 08_equi.in -c ${complex}_heat2.rst7 -p ${complex}.parm7 -o ${complex}_equi.out -r ${complex}_equi.rst7 -x ${complex}_equi.nc -l ${complex}_equi.log
+pmemd.cuda -O -i 08_equi.in -c ${complex}${repeat}_heat2.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_equi.out -r ${complex}${repeat}_equi.rst7 -x ${complex}${repeat}_equi.nc -l ${complex}${repeat}_equi.log
