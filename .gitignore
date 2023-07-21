@@ -1,0 +1,4 @@
+.idea/
+*pycache*
+test/.cache/
+test/outputs/
