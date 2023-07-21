@@ -1,6 +1,7 @@
 #/usr/bin/env python
 
 import argparse
+import ast
 import operator
 
 from md import *
@@ -204,7 +205,7 @@ def rename_ligands(row):
         os.system(cmd)
 
 
-def run_tleap_simple(row):
+def run_tleap_simple(row, receptor='../../6td3_E_F_protein.pdb'):
 
     ligname = row['ligname']
 
@@ -215,8 +216,6 @@ def run_tleap_simple(row):
     ligand = f'{ligname}_resp_crd.mol2'
 
     run(f'cp ../resp/{ligand} .')
-
-    receptor = '../../6td3_E_F_protein.pdb'
 
     complex = ligname
 
@@ -244,6 +243,7 @@ if __name__ == '__main__':
     # Optional arguments
     parser.add_argument('-o','--output', help='Output file name',required=False)
     parser.add_argument('--pandas', action='store_true', help='Apply Pandas function row by row', required=False)
+    parser.add_argument('-p','--parameters', help='Dictionary with extra parameters for functions',required=False)
 
     args = parser.parse_args()
 
@@ -278,4 +278,6 @@ if __name__ == '__main__':
 
         print(df)
 
-        df.apply(eval(args.function), axis=1)
+        parameters = ast.literal_eval(args.parameters)
+
+        df.apply(eval(args.function), **parameters, axis=1)

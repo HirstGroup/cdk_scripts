@@ -36,5 +36,10 @@ def test_make_resname():
 	assert_frame_equal(df, df2)
 
 
+def test_eval():
 
-test_make_resname()
+	parameters = ast.literal_eval("{'receptor':'file.pdb'}")
+
+	print(parameters)
+
+	assert parameters == {'receptor': 'file.pdb'}
