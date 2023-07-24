@@ -7,7 +7,7 @@ import textwrap
 from run import run
 
 
-def antegbsa(complex):
+def antegbsa(complex, repeat=''):
     """
     Run ante-MMPBSA.py to prepare topolopy files for MMPBSA.py
 
@@ -24,9 +24,9 @@ def antegbsa(complex):
     ligandmask = complex.upper()
 
     if not os.path.exists('gbsa'):
-        os.makedirs('gbsa')
+        os.makedirs(f'gbsa{repeat}')
 
-    os.chdir('gbsa')
+    os.chdir(f'gbsa{repeat}')
     os.system(f'rm -f {complex}-complex.parm7 {complex}-receptor.parm7 {complex}-ligand.parm7')
 
     run(f'ante-MMPBSA.py -p ../{complex}.parm7 -c {complex}-complex.parm7 -r {complex}-receptor.parm7 -l {complex}-ligand.parm7 --strip-mask=:WAT:CL:NA --ligand-mask=:{ligandmask} --radii=mbondi2')
@@ -34,7 +34,7 @@ def antegbsa(complex):
     os.chdir('../')
 
 
-def gbsa(complex):
+def gbsa(complex, repeat=''):
     """
     Run MMPBSA.py
 
@@ -48,7 +48,7 @@ def gbsa(complex):
     None (runs MMPBSA.py)
     """
 
-    os.chdir('gbsa')
+    os.chdir(f'gbsa{repeat}')
 
     string = textwrap.dedent('''\
     &general 
@@ -62,7 +62,7 @@ def gbsa(complex):
     with open('gbsa.in', 'w') as f:
         f.write(string)
 
-    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}_equi_cent_strip.nc')
+    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi_cent_strip.nc')
 
     os.chdir('../')
 
@@ -72,11 +72,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run gbsa.py')
 
     # Required arguments
-    parser.add_argument('-i','--input', help='Name of complexes to run functions on',required=True)
+    parser.add_argument('-i','--input', help='Name of complexes to run functions on', required=True)
 
     # Optional arguments
-    parser.add_argument('--cd', help='Name of directory to change into to run commands',required=False)
-    parser.add_argument('-f','--functions', nargs='+', help='Function names to run',required=False)
+    parser.add_argument('--cd', help='Name of directory to change into to run commands', required=False)
+    parser.add_argument('-f','--functions', nargs='+', help='Function names to run', required=False)
+    parser.add_argument('-r','--repeat', help='Repeat pattern, e.g. _2, _3', required=False)
     
     args = parser.parse_args()
 
@@ -86,14 +87,14 @@ if __name__ == '__main__':
     complex = args.input
 
     if args.functions is None:
-        antegbsa(complex)
-        gbsa(complex)
+        antegbsa(complex, args.repeat)
+        gbsa(complex, args.repeat)
 
     else:
         if 'antegbsa' in args.functions:
-            antegbsa(complex)
+            antegbsa(complex, args.repeat)
         if 'gbsa' in args.functions:
-            gbsa(complex)
+            gbsa(complex, args.repeat)
 
     if args.cd:
         os.chdir('../')
