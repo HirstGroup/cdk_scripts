@@ -7,7 +7,7 @@ import textwrap
 from run import run
 
 
-def center_strip(complex, time='equi'):
+def center_strip(complex, time='equi', repeat=''):
 	"""
 	Center and strip MD trajectory
 
@@ -22,9 +22,9 @@ def center_strip(complex, time='equi'):
 	"""
 
 	string = textwrap.dedent(f'''\n
-	trajin {complex}_{time}.nc 1 last 
+	trajin {complex}{repeat}_{time}.nc 1 last 
 	autoimage
-	trajout {complex}_{time}_cent.nc		
+	trajout {complex}{repeat}_{time}_cent.nc		
 	''')
 
 	with open('center.ptraj', 'w') as f:
@@ -33,10 +33,10 @@ def center_strip(complex, time='equi'):
 	run(f'cpptraj {complex}.parm7 center.ptraj')
 
 	string = textwrap.dedent(f'''\
-	trajin {complex}_{time}_cent.nc 
+	trajin {complex}{repeat}_{time}_cent.nc 
 	strip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
 	rms
-	trajout {complex}_{time}_cent_strip.nc
+	trajout {complex}{repeat}_{time}_cent_strip.nc
 	''')
 
 	with open('strip.ptraj', 'w') as f:
@@ -64,13 +64,14 @@ if __name__ == '__main__':
 
     # Optional arguments
     parser.add_argument('--cd', help='Name of directory to change into to run commands',required=False)
+    parser.add_argument('-r', '--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
 
     args = parser.parse_args()
 
     if args.cd:
     	os.chdir(args.cd)
 
-    center_strip(args.input)
+    center_strip(args.input, args.repeat)
 
     if args.cd:
     	os.chdir('../')
