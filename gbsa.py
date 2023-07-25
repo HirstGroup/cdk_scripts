@@ -23,7 +23,7 @@ def antegbsa(complex, repeat=''):
 
     ligandmask = complex.upper()
 
-    if not os.path.exists('gbsa'):
+    if not os.path.exists(f'gbsa{repeat}'):
         os.makedirs(f'gbsa{repeat}')
 
     os.chdir(f'gbsa{repeat}')
