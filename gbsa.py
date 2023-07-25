@@ -62,7 +62,7 @@ def gbsa(complex, repeat=''):
     with open('gbsa.in', 'w') as f:
         f.write(string)
 
-    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi_cent_strip.nc')
+    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi_cent_strip.nc')
 
     os.chdir('../')
 

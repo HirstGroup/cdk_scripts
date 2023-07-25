@@ -5,7 +5,7 @@ import os
 import pandas as pd
 
 
-def parse_gbsa(infile, prop='delta_total'):
+def parse_gbsa(infile):
     """
     Parse GBSA output data
 
@@ -50,19 +50,24 @@ def parse_gbsa(infile, prop='delta_total'):
     return results
 
 
-def parse_gbsa_row(row):
+def parse_gbsa_row(row, repeat=''):
 
     ligname = row['ligname']
 
     try:
-        results = parse_gbsa(f'md/{ligname}/gbsa/{ligname}_gbsa.dat')
+        results = parse_gbsa(f'md/{ligname}/gbsa{repeat}/{ligname}_gbsa.dat')
 
-        return results
+        new_results = {}
+
+        for key, val in results.items():
+            new_results[f'gbsa{repeat}_{key}'] = val
+
+        return new_results
     except:
         print(f'No results for {ligname}')
         return None
 
-def parse_gbsa_df(df):
+def parse_gbsa_df(df, repeat=''):
     """
     Parse GBSA output data row by row
 
@@ -74,9 +79,9 @@ def parse_gbsa_df(df):
     df: pandas df
     """
 
-    df['gbsa_results'] = df.apply(parse_gbsa_row, axis=1)
+    df[f'gbsa_results{repeat}'] = df.apply(parse_gbsa_row, repeat=repeat, axis=1)
 
-    df = df.join(pd.json_normalize(df['gbsa_results'])).drop('gbsa_results', axis=1)
+    df = df.join(pd.json_normalize(df[f'gbsa_results{repeat}'])).drop(f'gbsa_results{repeat}', axis=1)
 
     return df
 
@@ -90,6 +95,7 @@ if __name__ == '__main__':
 
     # Optional arguments
     parser.add_argument('-o','--output', help='Output file name',required=False)
+    parser.add_argument('-r','--repeat', default='', help='Repeat pattern to parse gbsa, e.g. _2, _3 etc.',required=False)
 
     args = parser.parse_args()
 
@@ -104,7 +110,7 @@ if __name__ == '__main__':
 
     #df.head(n=15).apply(generate_mol2_row, axis=1)
 
-    df = parse_gbsa_df(df)
+    df = parse_gbsa_df(df, args.repeat)
 
     print(df)
 
