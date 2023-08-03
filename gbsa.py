@@ -52,7 +52,7 @@ def gbsa(complex, repeat=''):
 
     string = textwrap.dedent('''\
     &general 
-      interval=1, netcdf=1,
+      interval=10, netcdf=1,
     /   
     &gb 
       igb=5, saltcon=0.100,
