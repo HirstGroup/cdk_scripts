@@ -106,4 +106,4 @@ if __name__ == '__main__':
 
 	args = parser.parse_args()
 
-	delete_mds(args.input, args.time, args.repeat)
+	delete_mds(args.input, time=args.time, repeat=args.repeat)

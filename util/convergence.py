@@ -15,6 +15,8 @@ parser = argparse.ArgumentParser(description='Analyze convergence of GBSA')
 
 # Required arguments
 parser.add_argument('-i','--input', help='Input CSV file name', required=True)
+parser.add_argument('-o','--output', help='Output CSV file name', required=True)
+parser.add_argument('-n','--n_repeats', type=int, help='Number of gbsa repeats', required=True)
 
 args = parser.parse_args()
 
@@ -22,15 +24,12 @@ df = pd.read_csv(args.input, sep=';')
 
 df.dropna(inplace=True)
 
-a = list(range(1,11))
+a = list(range(1,args.n_repeats+1))
 
 df['gbsa_4_delta_total'] = df['gbsa_4_10_delta_total']
 
 df['gbsa_1_delta_total'] = df['gbsa_delta_total']
 
-
-for i in range(5,11):
-	df['gbsa_%s_delta_total' %i] = df['gbsa_1_delta_total']
 
 def get_std(d_names):
 	# Get standard deviation for dictionary of combinations vs iterations in GBSA data
@@ -131,6 +130,8 @@ print(d_names)
 get_std(d_names)
 
 plot_std()
+
+df.to_csv(args.output, sep=';', index=False)
 
 print(df)
 
