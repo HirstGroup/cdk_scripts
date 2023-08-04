@@ -64,7 +64,7 @@ def execute(cmd):
         raise subprocess.CalledProcessError(return_code, cmd)
 
 
-def run(cmd):
+def run(cmd, verbose=True):
     """
     Run a command, print output lines one by one and return all output
 
@@ -82,7 +82,7 @@ def run(cmd):
     lines = []
 
     for line in execute(cmd):
-        print(line, end="")
+        if verbose: print(line, end="")
         lines.append(line)
     output = ''.join(lines)
 

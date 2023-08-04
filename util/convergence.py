@@ -22,12 +22,15 @@ df = pd.read_csv(args.input, sep=';')
 
 df.dropna(inplace=True)
 
-a = [1,2,3,4]
+a = list(range(1,11))
 
 df['gbsa_4_delta_total'] = df['gbsa_4_10_delta_total']
 
 df['gbsa_1_delta_total'] = df['gbsa_delta_total']
 
+
+for i in range(5,11):
+	df['gbsa_%s_delta_total' %i] = df['gbsa_1_delta_total']
 
 def get_std(d_names):
 	# Get standard deviation for dictionary of combinations vs iterations in GBSA data
