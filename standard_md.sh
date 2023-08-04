@@ -244,10 +244,10 @@ NPT MD w/No position restraints and PME (sander)
  &cntrl
   ntx    = 5,
   irest  = 1,
-  ntpr   = 1000,
-  ntwx   = 1000,
-  ntwe   = 1000,
-  ntwr   = 1000,
+  ntpr   = 10000,
+  ntwx   = 10000,
+  ntwe   = 10000,
+  ntwr   = 10000,
   ig     = -1,
 
   ntf    = 1,
