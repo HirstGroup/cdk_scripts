@@ -1,3 +1,5 @@
+#!/bin/bash
+
 complex=$1
 repeat=${2:-""} # optional parameter to run repeats, e.g. _1 _2 etc
 
