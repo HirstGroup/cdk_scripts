@@ -96,8 +96,8 @@ if __name__ == '__main__':
     complex = args.input
 
     if args.functions is None:
-        antegbsa(complex, args.repeat)
-        gbsa(complex, args.part, args.repeat)
+        antegbsa(complex, part=args.part, repeat=args.repeat)
+        gbsa(complex, part=args.part, repeat=args.repeat)
 
     else:
         if 'antegbsa' in args.functions:

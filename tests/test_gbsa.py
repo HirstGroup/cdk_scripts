@@ -63,11 +63,13 @@ def test_gbsa_arg2():
 def test_gbsa_main():
 	# test gbsa main with part option
 
-	os.system('cp input/l23.parm7 output/')
-	os.system('cp input/l23_equi2_cent_strip.nc output/')
+    os.system('cp input/l23.parm7 output/')
+    os.system('cp input/l23_equi2_cent_strip.nc output/')
 
-	os.system('rm -rf output/gbsa2/')
+    os.system('rm -rf output/gbsa2/')
 
-	os.system('python ../gbsa.py -i l23 --cd output -part 2')
+    os.system('python ../gbsa.py -i l23 --cd output -p 2')
+
+    compare_files('input/l23_gbsa2.dat', 'output/gbsa2/l23_gbsa2.dat', 1)
 
 test_gbsa_main()
