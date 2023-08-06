@@ -8,7 +8,7 @@ from util.delete_md import delete_mds
 from run import run
 
 
-def center_strip(complex, time='equi', repeat=''):
+def center_strip(complex, repeat='', time='equi'):
     """
     Center and strip MD trajectory
 
@@ -16,6 +16,10 @@ def center_strip(complex, time='equi', repeat=''):
     ----------
     complex: str
         name of complex
+    part : srt
+        part pattern, e.g. 2, 3
+    time : str
+        time pattern, e.g. equi, equi2
 
     Returns
     -------
@@ -66,18 +70,18 @@ if __name__ == '__main__':
     # Optional arguments 
     parser.add_argument('--cd', help='Name of directory to change into to run commands', required=False)
     parser.add_argument('-r', '--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
+    parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
     parser.add_argument('--delete', action='store_true', help='Delete original MD trajectory files', required=False)
-    action='store_true'
 
     args = parser.parse_args()
 
     if args.cd:
         os.chdir(args.cd)
 
-    center_strip(args.input, repeat=args.repeat)
+    center_strip(args.input, repeat=args.repeat, time=args.time)
 
     if args.delete:
-        delete_mds(args.input, repeat=args.repeat)
+        delete_mds(args.input, repeat=args.repeat, time=args.time)
 
     if args.cd:
         os.chdir('../')
