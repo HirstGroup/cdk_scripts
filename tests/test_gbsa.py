@@ -36,6 +36,7 @@ def test_gbsa():
 def test_gbsa_arg():
 
 	os.system('cp input/a01.parm7 output/')
+	os.system('cp input/a01_equi_cent_strip.nc output/')
 
 	os.system('rm -rf output/gbsa/')
 
@@ -51,9 +52,22 @@ def test_gbsa_arg():
 def test_gbsa_arg2():
 
 	os.system('cp input/a01.parm7 output/')
+	os.system('cp input/a01_equi_cent_strip.nc output/')
 
 	os.system('rm -rf output/gbsa/')
 
 	os.system('python ../gbsa.py -i a01 --cd output')
 
 	compare_files('input/a01_gbsa.dat', 'output/gbsa/a01_gbsa.dat', 1)
+
+def test_gbsa_main():
+	# test gbsa main with part option
+
+	os.system('cp input/l23.parm7 output/')
+	os.system('cp input/l23_equi2_cent_strip.nc output/')
+
+	os.system('rm -rf output/gbsa2/')
+
+	os.system('python ../gbsa.py -i l23 --cd output -part 2')
+
+test_gbsa_main()
