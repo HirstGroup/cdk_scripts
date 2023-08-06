@@ -1,4 +1,4 @@
-trajin l23_equi_cent.nc 
+trajin l23_equi2_cent.nc 
 strip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
 rms
-trajout l23_equi_cent_strip.nc
+trajout l23_equi2_cent_strip.nc

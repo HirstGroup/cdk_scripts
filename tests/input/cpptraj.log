@@ -1,0 +1,6 @@
+# 08/06/23 14:50:59
+# Args:  l23.parm7
+# Loaded topologies:
+#   l23.parm7
+trajin l23_equi.nc
+run
