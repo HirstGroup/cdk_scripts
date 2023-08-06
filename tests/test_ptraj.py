@@ -45,4 +45,23 @@ def test_ptraj_main_delete():
 
 	os.chdir('../')
 
-test_ptraj_main_delete()
+
+def test_ptraj_main_time():
+	# test ptraj main function with delete option and equi2 time for sample MD with 2 frames
+
+	os.system('cp input/l23.parm7 output/')
+	os.system('cp input/l23_equi.nc output/l23_equi2.nc')
+	os.system('rm output/l23_equi2_cent.nc')
+	os.system('rm output/l23_equi2_cent_strip.nc')
+
+	os.chdir('output')
+
+	os.system('python ../../ptraj.py -i l23 -t equi2 --delete')	
+
+	assert os.path.isfile('l23_equi2_cent.nc') is False
+	assert os.path.isfile('l23_equi2.nc') is False
+	assert os.path.isfile('l23_equi2_cent_strip.nc') is True
+
+	os.chdir('../')	
+
+test_ptraj_main_time()
