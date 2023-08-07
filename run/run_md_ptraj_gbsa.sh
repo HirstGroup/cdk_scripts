@@ -1,14 +1,44 @@
 #!/bin/bash
 
-complex=$1
-repeat=${2:-""} # optional parameter to run repeats, e.g. _1 _2 etc
-part=${3:-""} # optional parameter to run second part of equi with standard_md2
+set -e
 
-echo "complex = " $complex "repeat = " $repeat
+# default values
+part=""
+test=NO
 
-jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh $complex "$repeat")
+while [[ $# > 0 ]]
+do
+key="$1"
 
-sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh $complex "$repeat" "$part"
+case $key in
+    -c|--complex)
+    complex="$2"
+    shift
+    ;;
+    -p|--part)
+    part="$2"
+    shift
+    ;;
+    -r|--repeat)
+    repeat="$2"
+    shift
+    ;;
+    --test)
+    test=YES
+    ;;
+    *)
+    echo "Unknown argument: $1"
+    exit 1
+    ;;
+esac
+shift
+done
+
+echo "complex = " $complex "part = " $part "repeat = " $repeat "test = " $test
+
+jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+
+sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
 
 
 

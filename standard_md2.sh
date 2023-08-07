@@ -2,8 +2,46 @@
 
 set -e
 
-complex=$1
-repeat=$2 # optional parameter to run repeats, e.g. _1 _2 etc
+# default values
+part=""
+test=NO
+
+while [[ $# > 0 ]]
+do
+key="$1"
+
+case $key in
+    -c|--complex)
+    complex="$2"
+    shift
+    ;;
+    -p|--part)
+    part="$2"
+    shift
+    ;;
+    -t|--time)
+    time="$2"
+    shift
+    ;;
+    --test)
+    test=YES
+    ;;
+    *)
+    echo "Unknown argument: $1"
+    exit 1
+    ;;
+esac
+shift
+done
+
+nstlim=5000000
+
+if [ $test -eq "YES" ]
+then
+echo "Running test calculation"
+nstlim=20000
+fi
+
 
 IFS='_' read -r receptor lig <<< "$complex"
 
@@ -25,7 +63,7 @@ NPT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10,
 
-  nstlim = 5000000,
+  nstlim = $nstlim,
   t      = 0.0,
   nscm   = 1000,
   dt     = 0.002,

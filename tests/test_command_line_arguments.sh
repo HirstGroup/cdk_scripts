@@ -1,10 +1,15 @@
 #!/bin/bash
+# test command line arguments
 
 set -e
 
+scripts=$scripts
+
 # default values
-part=""
-test=NO
+complex=complex
+part=part
+time=time
+overwrite=NO
 
 while [[ $# > 0 ]]
 do
@@ -23,8 +28,8 @@ case $key in
     time="$2"
     shift
     ;;
-    --test)
-    test=YES
+    -O)
+    overwrite=YES
     ;;
     *)
     echo "Unknown argument: $1"
@@ -34,5 +39,4 @@ esac
 shift
 done
 
-python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -t "equi$part" --delete
-python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat"
+echo "complex =" $complex "time =" $time "part =" $part "overwrite =" $overwrite
