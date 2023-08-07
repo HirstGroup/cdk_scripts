@@ -1,5 +1,5 @@
 .idea/
 *pycache*
-test/.cache/
-test/outputs/*
-!test/outputs/.gitkeep
+tests/.cache/
+tests/outputs/*
+!tests/outputs/.gitkeep
