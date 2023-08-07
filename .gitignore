@@ -2,3 +2,4 @@
 *pycache*
 test/.cache/
 test/outputs/*
+!test/outputs/.gitkeep

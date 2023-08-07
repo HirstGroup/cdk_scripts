@@ -43,22 +43,28 @@ done
 
 echo "complex = " $complex "part = " $part "repeat = " $repeat "test = " $test
 
-sbatch_cmd="sbatch --parsable ~/scripts/1gpu.sh"
 if [ $sbatch = "NO" ]; then
-	sbatch_cmd=""
-fi
+	
+	if [ $part = "NO" ]; then
+		bash ~/cdk_scripts/standard_md.sh -c $complex -r "$repeat" --test $test
+	else
+		bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test
+	fi
 
-if [ $part = "NO" ]; then
-	jobid=$(${sbatch_cmd}bash ~/cdk_scripts/standard_md.sh -c $complex -r "$repeat" --test $test)
 else
-	jobid=$(${sbatch_cmd}bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+
+	if [ $part = "NO" ]; then
+		jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md.sh -c $complex -r "$repeat" --test $test)
+	else
+		jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+	fi
+
 fi
 
 echo "Running batch job $jobid"
 
-sbatch_cmd="sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash "
 if [ $sbatch = "NO" ]; then
-	sbatch_cmd=""
+	bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
+else
+	sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"	
 fi
-
-${sbatch_cmd}bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
