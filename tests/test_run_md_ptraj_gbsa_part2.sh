@@ -12,8 +12,6 @@ cd output
 
 bash -x ~/cdk_scripts/run/run_md_ptraj_gbsa_part2.sh -c l23 --test YES
 
-ls gbsa2/l23_gbsa2.dat
-
 cd ..
 }
 
@@ -27,10 +25,11 @@ cd output
 
 bash -x ~/cdk_scripts/run/run_md_ptraj_gbsa_part2.sh -c l23 -r _2 --test YES
 
-ls gbsa2_2/l23_gbsa2_2.dat
-
 cd ..
 }
 
 test1
 test2
+
+ls gbsa2/l23_gbsa2.dat
+ls gbsa2_2/l23_gbsa2_2.dat
