@@ -44,7 +44,7 @@ fi
 
 IFS='_' read -r receptor lig <<< "$complex"
 
-cat > 09_equi2{repeat}.in << EOF
+cat > 09_equi2${repeat}.in << EOF
 NPT MD w/No position restraints and PME (sander)
  &cntrl
   ntx    = 5,
@@ -80,4 +80,4 @@ NPT MD w/No position restraints and PME (sander)
  / 
 EOF
 
-pmemd.cuda -O -i 09_equi2{repeat}.in -c ${complex}${repeat}_equi.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_equi2.out -r ${complex}${repeat}_equi2.rst7 -x ${complex}${repeat}_equi2.nc -l ${complex}${repeat}_equi2.log
+pmemd.cuda -O -i 09_equi2${repeat}.in -c ${complex}${repeat}_equi.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_equi2.out -r ${complex}${repeat}_equi2.rst7 -x ${complex}${repeat}_equi2.nc -l ${complex}${repeat}_equi2.log
