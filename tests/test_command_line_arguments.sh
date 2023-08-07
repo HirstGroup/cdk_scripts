@@ -7,7 +7,7 @@ scripts=$scripts
 
 # default values
 complex=complex
-part=part
+part=""
 time=time
 overwrite=NO
 
@@ -39,4 +39,4 @@ esac
 shift
 done
 
-echo "complex =" $complex "time =" $time "part =" $part "overwrite =" $overwrite
+echo "complex =" $complex "time =" $time "part =" \"$part\" "overwrite =" $overwrite
