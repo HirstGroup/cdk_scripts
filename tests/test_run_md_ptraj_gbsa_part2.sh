@@ -31,5 +31,5 @@ cd ..
 test1
 test2
 
-ls gbsa2/l23_gbsa2.dat
-ls gbsa2_2/l23_gbsa2_2.dat
+ls output/gbsa2/l23_gbsa2.dat
+ls output/gbsa2_2/l23_gbsa2_2.dat
