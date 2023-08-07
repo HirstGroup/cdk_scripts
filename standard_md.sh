@@ -3,7 +3,8 @@
 set -e
 
 # default values
-part=""
+part=NO
+repeat=NO
 test=NO
 
 while [[ $# > 0 ]]
@@ -19,12 +20,17 @@ case $key in
     part="$2"
     shift
     ;;
+    -r|--repeat)
+    repeat="$2"
+    shift
+    ;;
     -t|--time)
     time="$2"
     shift
     ;;
     --test)
-    test=YES
+    test="$2"
+    shift
     ;;
     *)
     echo "Unknown argument: $1"
@@ -33,6 +39,10 @@ case $key in
 esac
 shift
 done
+
+if [ $repeat = "NO" ]; then
+repeat=""
+fi 
 
 cat > 01_min.in << EOF
 #NVT MD w/No position restraints and PME (sander)

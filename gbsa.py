@@ -95,13 +95,19 @@ if __name__ == '__main__':
 
     complex = args.input
 
+    if args.part == 'NO':
+        args.part = ''
+
+    if args.repeat == 'NO':
+        args.repeat = ''
+
     if args.functions is None:
         antegbsa(complex, part=args.part, repeat=args.repeat)
         gbsa(complex, part=args.part, repeat=args.repeat)
 
     else:
         if 'antegbsa' in args.functions:
-            antegbsa(complex, args.repeat)
+            antegbsa(complex, args.part, args.repeat)
         if 'gbsa' in args.functions:
             gbsa(complex, args.part, args.repeat)
 

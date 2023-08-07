@@ -1,0 +1,42 @@
+Reading parm file (l23-complex.parm7)
+title:
+default_name
+	mm_options:  e_debug=2
+	mm_options:  gb=5
+	mm_options:  rgbmax=25.000000
+	mm_options:  gbsa=0
+	mm_options:  surften=0.007200
+	mm_options:  cut=999.000000
+	mm_options:  epsext=78.300000
+	mm_options:  kappa=0.103952
+Processing NetCDF trajectory (_MMPBSA_complex.nc.0)
+
+Processing frame 1
+      iter    Total       bad      vdW     elect   nonpolar   genBorn      frms
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2675) enb14 -->   551.172
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2676) eel14 -->  4579.577
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2734) enb --> -1185.650
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2735) eel --> -10285.551
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2736) e_gb --> -2015.852
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2737) esurf -->     0.000
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2738) evdwnp -->     0.000
+ff:     0  -5787.54   2568.76   -634.48  -5705.97      0.00  -2015.85  1.81e+01
+ BOND    =      493.4540  ANGLE   =     1259.2088  DIHED      =      816.0972
+ VDWAALS =    -1185.6500  EEL     =   -10285.5510  EGB        =    -2015.8523
+ 1-4 VDW =      551.1722  1-4 EEL =     4579.5775  RESTRAINT  =        0.0000
+ ESURF   =        0.0000
+
+Processing frame 2
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2675) enb14 -->   576.277
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2676) eel14 -->  4561.712
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2734) enb --> -1202.361
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2735) eel --> -10333.041
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2736) e_gb --> -1938.456
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2737) esurf -->     0.000
+/home/pczbf/programs/amber20/amber20_src/AmberTools/src/sff/eff.c(2738) evdwnp -->     0.000
+ BOND    =      462.0933  ANGLE   =     1242.3109  DIHED      =      807.2059
+ VDWAALS =    -1202.3613  EEL     =   -10333.0408  EGB        =    -1938.4562
+ 1-4 VDW =      576.2773  1-4 EEL =     4561.7117  RESTRAINT  =        0.0000
+ ESURF   =        0.0000
+
+MM/GBSA processing done!

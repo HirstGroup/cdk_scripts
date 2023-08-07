@@ -3,7 +3,8 @@
 set -e
 
 # default values
-part=""
+part=NO
+repeat=NO
 test=NO
 
 while [[ $# > 0 ]]
@@ -19,12 +20,17 @@ case $key in
     part="$2"
     shift
     ;;
+    -r|--repeat)
+    repeat="$2"
+    shift
+    ;;
     -t|--time)
     time="$2"
     shift
     ;;
     --test)
-    test=YES
+    test="$2"
+    shift
     ;;
     *)
     echo "Unknown argument: $1"
@@ -35,13 +41,16 @@ shift
 done
 
 nstlim=5000000
-
-if [ $test -eq "YES" ]
-then
+ntpr=10000
+if [ $test = "YES" ]; then
 echo "Running test calculation"
-nstlim=20000
+ntpr=1000
+nstlim=2000
 fi
 
+if [ $repeat = "NO" ]; then
+repeat=""
+fi 
 
 IFS='_' read -r receptor lig <<< "$complex"
 
@@ -50,10 +59,10 @@ NPT MD w/No position restraints and PME (sander)
  &cntrl
   ntx    = 5,
   irest  = 1,
-  ntpr   = 10000,
-  ntwx   = 10000,
-  ntwe   = 10000,
-  ntwr   = 10000,
+  ntpr   = $ntpr,
+  ntwx   = $ntpr,
+  ntwe   = $ntpr,
+  ntwr   = $ntpr,
   ig     = -1,
 
   ntf    = 1,

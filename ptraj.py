@@ -69,6 +69,7 @@ if __name__ == '__main__':
 
     # Optional arguments 
     parser.add_argument('--cd', help='Name of directory to change into to run commands', required=False)
+    parser.add_argument('-p', '--part', default='', help='Part pattern, e.g. 2, 3', required=False)
     parser.add_argument('-r', '--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
     parser.add_argument('--delete', action='store_true', help='Delete original MD trajectory files', required=False)
@@ -78,10 +79,16 @@ if __name__ == '__main__':
     if args.cd:
         os.chdir(args.cd)
 
-    center_strip(args.input, repeat=args.repeat, time=args.time)
+    if args.part == 'NO':
+        args.part = ''
+
+    if args.repeat == 'NO':
+        args.repeat = ''
+
+    center_strip(args.input, repeat=args.repeat, time=args.time + args.part)
 
     if args.delete:
-        delete_mds(args.input, repeat=args.repeat, time=args.time)
+        delete_mds(args.input, repeat=args.repeat, time=args.time + args.part)
 
     if args.cd:
         os.chdir('../')
