@@ -5,6 +5,7 @@ set -e
 # default values
 part=NO
 repeat=NO
+sbatch=YES
 test=NO
 
 while [[ $# > 0 ]]
@@ -24,6 +25,10 @@ case $key in
     repeat="$2"
     shift
     ;;
+    --sbatch)
+    sbatch="$2"
+    shift
+    ;;
     --test)
     test="$2"
     shift
@@ -38,22 +43,22 @@ done
 
 echo "complex = " $complex "part = " $part "repeat = " $repeat "test = " $test
 
-sbatch="sbatch --parsable ~/scripts/1gpu.sh"
-if [ $test = "YES" ]; then
-	sbatch=""
+sbatch_cmd="sbatch --parsable ~/scripts/1gpu.sh"
+if [ $sbatch = "NO" ]; then
+	sbatch_cmd=""
 fi
 
 if [ $part = "NO" ]; then
-	jobid=$(${sbatch}bash ~/cdk_scripts/standard_md.sh -c $complex -r "$repeat" --test $test)
+	jobid=$(${sbatch_cmd}bash ~/cdk_scripts/standard_md.sh -c $complex -r "$repeat" --test $test)
 else
-	jobid=$(${sbatch}bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+	jobid=$(${sbatch_cmd}bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
 fi
 
 echo "Running batch job $jobid"
 
-sbatch="sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash "
-if [ $test = "YES" ]; then
-	sbatch=""
+sbatch_cmd="sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash "
+if [ $sbatch = "NO" ]; then
+	sbatch_cmd=""
 fi
 
-${sbatch}bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
+${sbatch_cmd}bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
