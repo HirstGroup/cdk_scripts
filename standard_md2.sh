@@ -3,7 +3,6 @@
 set -e
 
 # default values
-part=NO
 repeat=NO
 test=NO
 
@@ -16,16 +15,8 @@ case $key in
     complex="$2"
     shift
     ;;
-    -p|--part)
-    part="$2"
-    shift
-    ;;
     -r|--repeat)
     repeat="$2"
-    shift
-    ;;
-    -t|--time)
-    time="$2"
     shift
     ;;
     --test)
@@ -43,7 +34,6 @@ done
 nstlim=5000000
 ntpr=10000
 if [ $test = "YES" ]; then
-echo "Running test calculation"
 ntpr=1000
 nstlim=2000
 fi

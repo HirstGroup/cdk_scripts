@@ -5,7 +5,6 @@ set -e
 # default values
 part=NO
 repeat=NO
-test=NO
 
 while [[ $# > 0 ]]
 do
@@ -24,10 +23,6 @@ case $key in
     repeat="$2"
     shift
     ;;
-    --test)
-    test="$2"
-    shift
-    ;;
     *)
     echo "Unknown argument: $1"
     exit 1
@@ -36,5 +31,5 @@ esac
 shift
 done
 
-python ~/cdk_scripts/ptraj.py -i $complex -t "equi" -p $part -r $repeat --delete
-python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r $repeat
+python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -p $part --delete
+python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat"
