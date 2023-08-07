@@ -36,9 +36,17 @@ done
 
 echo "complex = " $complex "part = " $part "repeat = " $repeat "test = " $test
 
-jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+if [$repeat -eq ""]; then
+	jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh -c $complex --test $test)
+else
+	jobid=$(sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard_md${part}.sh -c $complex -r "$repeat" --test $test)
+fi
 
-sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
+if [$repeat -eq ""]; then
+	sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part"
+else
+	sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh bash ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p "$part" -r "$repeat"
+fi
 
 
 

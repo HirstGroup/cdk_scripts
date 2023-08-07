@@ -34,5 +34,10 @@ esac
 shift
 done
 
-python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -t "equi$part" --delete
-python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat"
+if [$repeat -eq ""]; then
+	python ~/cdk_scripts/ptraj.py -i $complex -t "equi$part" --delete
+	python ~/cdk_scripts/gbsa.py -i $complex -p "$part"
+else
+	python ~/cdk_scripts/ptraj.py -i $complex -t "equi$part" --delete
+	python ~/cdk_scripts/gbsa.py -i $complex -p "$part"
+fi
