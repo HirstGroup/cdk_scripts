@@ -72,6 +72,8 @@ def gbsa(complex, part='', repeat=''):
 
     run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{part}{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi{part}_cent_strip.nc')
 
+    os.system('rm *.nc.0 reference.frc')    
+
     os.chdir('../')
 
 

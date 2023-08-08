@@ -69,7 +69,8 @@ def parse_gbsa_row(row, repeat='', interval=''):
 
 def parse_gbsa_df(df, repeat='', interval=''):
     """
-    Parse GBSA output data row by row
+    Parse GBSA output data row by row.
+    If new data columns exist in original df, original df columns will be removed.
 
     Parameters:
     df: pandas df
@@ -79,9 +80,17 @@ def parse_gbsa_df(df, repeat='', interval=''):
     df: pandas df
     """
 
-    df[f'gbsa_results{repeat}{interval}'] = df.apply(parse_gbsa_row, repeat=repeat, interval=interval, axis=1)
+    df2 = pd.DataFrame()
 
-    df = df.join(pd.json_normalize(df[f'gbsa_results{repeat}{interval}'])).drop(f'gbsa_results{repeat}{interval}', axis=1)
+    df2[f'gbsa_results{repeat}{interval}'] = df.apply(parse_gbsa_row, repeat=repeat, interval=interval, axis=1)
+
+    df2 = df2.join(pd.json_normalize(df2[f'gbsa_results{repeat}{interval}'])).drop(f'gbsa_results{repeat}{interval}', axis=1)
+
+    for col in df2.columns:
+        if col in df.columns:
+            df.drop(col, axis=1, inplace=True)
+
+    df = df.join(df2)
 
     return df
 
