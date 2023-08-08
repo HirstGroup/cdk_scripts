@@ -3,6 +3,7 @@
 set -e
 
 # default values
+ignore_errors=NO
 part=NO
 repeat=NO
 
@@ -13,6 +14,10 @@ key="$1"
 case $key in
     -c|--complex)
     complex="$2"
+    shift
+    ;;
+    --ignore_errors)
+    ignore_errors="$2"
     shift
     ;;
     -p|--part)
@@ -31,5 +36,7 @@ esac
 shift
 done
 
-python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -p $part --delete
+echo $ignore
+
+python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -p $part --delete --ignore_errors ${ignore_errors}
 python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat"

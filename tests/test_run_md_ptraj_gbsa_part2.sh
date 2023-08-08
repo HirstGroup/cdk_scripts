@@ -1,7 +1,5 @@
 set -e
 
-sbatch=${1:-NO}
-
 test1() {
 # test for part 2
 

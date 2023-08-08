@@ -35,7 +35,7 @@ def run1(cmd):
     return output
 
 
-def execute(cmd):
+def execute(cmd, ignore_errors=False):
     """
     Execute a command and output lines one by one
 
@@ -61,10 +61,11 @@ def execute(cmd):
 
     if return_code:
         print(popen.stderr.read()) #.decode("utf-8"))
-        raise subprocess.CalledProcessError(return_code, cmd)
+        if not ignore_errors:
+            raise subprocess.CalledProcessError(return_code, cmd)
 
 
-def run(cmd, verbose=True):
+def run(cmd, ignore_errors=False, verbose=True):
     """
     Run a command, print output lines one by one and return all output
 
@@ -81,7 +82,7 @@ def run(cmd, verbose=True):
 
     lines = []
 
-    for line in execute(cmd):
+    for line in execute(cmd, ignore_errors=ignore_errors):
         if verbose: print(line, end="")
         lines.append(line)
     output = ''.join(lines)
