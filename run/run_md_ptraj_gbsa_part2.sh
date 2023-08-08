@@ -31,8 +31,10 @@ esac
 shift
 done
 
-echo "complex = " $complex "repeat = " $repeat
+#echo "complex = " $complex "repeat = " $repeat
 
 jobid=$(sbatch --parsable ~/scripts/1gpu.sh ~/cdk_scripts/standard_md2.sh -c $complex -r "$repeat" --test $test)
+
+echo "Submitted batch job $jobid"
 
 sbatch --dependency=afterok:$jobid ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c $complex -p 2 -r "$repeat"
