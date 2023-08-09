@@ -278,6 +278,9 @@ if __name__ == '__main__':
 
         print(df)
 
-        parameters = ast.literal_eval(args.parameters)
+        if args.parameters is not None:
+            parameters = ast.literal_eval(args.parameters)
+        else:
+            parameters = {}
 
         df.apply(eval(args.function), **parameters, axis=1)
