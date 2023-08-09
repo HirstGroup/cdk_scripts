@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 
 from itertools import combinations
 
+sys.exit('Work in progress to convert to functions')
+
 def get_std(df, d_names, part=''):
 	# Get standard deviation for dictionary of combinations vs iterations in GBSA data
 
