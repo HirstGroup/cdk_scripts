@@ -14,6 +14,14 @@ def standard_md_part(complex, part, cd='NO', repeat='', test='NO'):
     if repeat == 'NO':
         repeat = ''
 
+    if part == 1:
+        previous_rst7 = f'{complex}{repeat}_heat2.rst7'
+        part = ''
+    elif part == 2:
+        previous_rst7 = f'{complex}{repeat}_equi.rst7'
+    else:
+        previous_rst7 = f'{complex}{repeat}_equi{part-1}.rst7'
+
     nstlim = 5000000
     ntpr = 10000
 
@@ -59,11 +67,6 @@ def standard_md_part(complex, part, cd='NO', repeat='', test='NO'):
 
     with open(f'09_equi{part}{repeat}.in', 'w') as f:
         f.write(string)
-
-    if part == 2:
-        previous_rst7 = f'{complex}{repeat}_heat2.rst7'
-    else:
-        previous_rst7 = f'{complex}{repeat}_equi{part-1}.rst7'
 
     run(f'pmemd.cuda -O -i 09_equi{part}{repeat}.in -c {previous_rst7} -p {complex}.parm7 -o {complex}{repeat}_equi{part}.out -r {complex}{repeat}_equi{part}.rst7 -x {complex}{repeat}_equi{part}.nc -l {complex}{repeat}_equi{part}.log')
 

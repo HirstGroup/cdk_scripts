@@ -2,7 +2,7 @@ set -e
 
 rm -rf output/*
 cp input/l23.parm7 output/
-cp input/l23_heat2.rst7 output/l23_3_heat2.rst7
+cp input/l23_heat2.rst7 output/l23_3_equi.rst7
 
 cd input/
 

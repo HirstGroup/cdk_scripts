@@ -19,11 +19,7 @@ first_part = args.part_list[0]
 
 cmd = f'sbatch --parsable ~/scripts/1gpu.sh python ~/cdk_scripts/standard_md_part.py -c {args.complex} -p {first_part} -r {args.repeat} --test {args.test}'
 
-print(cmd)
-
 out = os.popen(cmd).read()
-
-print(out)
 
 jobid = out.splitlines()[0]
 
@@ -36,8 +32,6 @@ if len(args.part_list) > 1:
     for part in args.part_list[1:]:
 
         out = os.popen(f'sbatch --dependency=afterok:{jobid} --parsable ~/scripts/1gpu.sh python ~/cdk_scripts/standard_md_part.py -c {args.complex} -p {part} -r {args.repeat} --test {args.test}').read()
-
-        print(out)
 
         jobid = out.splitlines()[0]
 
