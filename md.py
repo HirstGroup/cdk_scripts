@@ -19,11 +19,13 @@ def get_charge(infile):
 
     Parameters
     ----------
-    infile: file name of mol2 file
+    infile : str
+        file name of mol2 file
 
     Returns
     -------
-    charge: total charge of molecule
+    charge : int
+        total charge of molecule
 
     """
 
@@ -52,10 +54,14 @@ def create_resp1_file(infile, outfile, charge, cpu=1):
 
     Parameters
     ----------
-    infile: name of molecule input file
-    outfile: name of Gaussian output file
-    charge: charge of molecule
-    cpu: number of CPUs to use for Gaussian calculation
+    infile : str
+        name of molecule input file
+    outfile : str 
+        name of Gaussian output file
+    charge : int
+        charge of molecule
+    cpu : int
+        number of CPUs to use for Gaussian calculation
 
     Returns
     -------
@@ -87,12 +93,15 @@ def check_resp1_output(infile, inchikey):
 
     Parameters
     ----------
-    infile: name of Gaussian output file
-    inchikey: inchikey of starting structure
+    infile : str
+        name of Gaussian output file
+    inchikey : str
+        inchikey of starting structure
 
     Returns
     -------
-    check: 'OK' or 'NOK' string
+    check : str
+        'OK' or 'NOK'
     """
 
     with open(infile) as f:
@@ -117,11 +126,13 @@ def get_inchikey(infile):
 
     Parameters
     ----------
-    infile: structure input file
+    infile : str
+        structure input file
 
     Returns
     -------
-    inchikey: inchikey of structure
+    inchikey : str
+        inchikey of structure
     """
 
     inchikey = os.popen(f'obabel {infile} -oinchikey').read().split('\n')[0]    
@@ -135,10 +146,14 @@ def create_resp2_file(infile, outfile, charge, cpu=1):
 
     Parameters
     ----------
-    infile: name of Gaussian resp1 output file
-    outfile: name of Gaussian output file
-    charge: charge of molecule
-    cpu: number of CPUs to use for Gaussian calculation
+    infile : str
+        name of Gaussian resp1 output file
+    outfile : str
+        name of Gaussian output file
+    charge : int
+        charge of molecule
+    cpu : int
+        number of CPUs to use for Gaussian calculation
 
     Returns
     -------
@@ -170,9 +185,14 @@ def create_resp3_file(infile, outfile1, outfile2, auxfile, resname):
 
     Parameters
     ----------
-    infile: output ESP file from Gaussian
-    outfile: mol2 output file
-    auxfile: mol2 file with original coordinates
+    infile : str
+        output ESP file from Gaussian
+    outfile1 : str
+        mol2 output file with resp charges
+    outfile2 : str
+        mol2 outfile file with resp charges and original coordinates
+    auxfile : str
+        mol2 file with original coordinates
 
     Returns
     -------
@@ -198,13 +218,17 @@ def check_resp3_file(infile, outfile, inchikey, charge):
 
     Parameters
     ----------
-    infile: input mol2 resp file
-    inchikey: inchikey of structure
-    charge: charge of structure
+    infile : str
+        input mol2 resp file
+    inchikey : str
+        inchikey of structure
+    charge : int
+        charge of structure
 
     Returns
     -------
-    check: string 'OK' or 'NOK'
+    check: str
+        'OK' or 'NOK'
     """
 
     sys.exit('Not working because obabel gives different can, inchi and inchikey for structures')
@@ -230,13 +254,16 @@ def run_tleap(ligand, receptor, complex):
 
     Parameters
     ----------
-    ligand: ligand file in mol2 format
-    receptor: receptor file in pdb format
-    complex: name of complex
+    ligand : str
+        ligand file in mol2 format
+    receptor : str
+        receptor file in pdb format
+    complex : str
+        name of complex
 
     Returns
     -------
-    tleap_input: str (and complex parm7 and rst7 files created)
+    tleap_input : str (and complex parm7 and rst7 files created)
         tleap input file contents used 
     """
 
@@ -270,16 +297,23 @@ def make_tleap_input(ligandname, ligand, receptor, complex, neutral_expression):
 
     Parameters
     ----------
-    ligandname: root of ligand file name
-    ligand: ligand file in mol2 format
-    receptor: receptor file in pdb format
-    complex: name of complex
-    neutral_expression: expression used to neutralize complex
-    outfolder: name of folder to write output to
+    ligandname : str
+        root of ligand file name
+    ligand : str
+        ligand file in mol2 format
+    receptor : str
+        receptor file in pdb format
+    complex : str
+        name of complex
+    neutral_expression : str
+        expression used to neutralize complex
+    outfolder : str
+        name of folder to write output to
 
     Returns
     -------
-    tleap_input: string with tleap input file
+    tleap_input : str
+        tleap input file
     """
 
     tleap_input = textwrap.dedent(f'''\
