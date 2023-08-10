@@ -70,10 +70,10 @@ if __name__ == '__main__':
 
 	# Required arguments
 	parser.add_argument('-i','--input', help='Input complex name', required=True)
-	parser.add_argument('-o','--output', help='Output file name containing results of check', required=True)
 
 	# Optional arguments
 	parser.add_argument('-f','--frames', default=500, type=int, help='Number of frames in MD', required=False)
+	parser.add_argument('-o','--output', help='Output file name containing results of check', required=False)
 	parser.add_argument('-p','--part_list', nargs='+', default=[''], help='Parts to look for', required=False)
 	parser.add_argument('-r', '--repeat_list', nargs='+', default=[''], help='Repeat pattern, e.g. _2, _3', required=False)
 	parser.add_argument('-t','--time', nargs='+', default='equi', help='Time pattern to look for {complex}_time files', required=False)
