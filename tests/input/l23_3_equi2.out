@@ -5,18 +5,19 @@
 
 | PMEMD implementation of SANDER, Release 18
 
-|  Compiled date/time: Wed Apr 12 15:28:05 2023
-| Run on 08/09/2023 at 17:13:09
+|  Compiled date/time: Tue Apr 28 02:19:54 2020
+| Run on 08/10/2023 at 17:02:49
 
 |   Executable path: pmemd.cuda
-| Working directory: /home/pczbf/cdk_scripts/tests/input
-|          Hostname: Unknown
+| Working directory: /gpfs01/home/pczbf/cdk_scripts/tests/input
+|          Hostname: compchem001
+
   [-O]verwriting output
 
 File Assignments:
 |   MDIN: 09_equi2_3.in                                                         
 |  MDOUT: l23_3_equi2.out                                                       
-| INPCRD: l23_3_heat2.rst7                                                      
+| INPCRD: l23_3_equi.rst7                                                       
 |   PARM: l23.parm7                                                             
 | RESTRT: l23_3_equi2.rst7                                                      
 |   REFC: refc                                                                  
@@ -64,7 +65,7 @@ NPT MD w/No position restraints and PME (sander)
  /                                                                             
 
 
-Note: ig = -1. Setting random seed to   584020 based on wallclock time in 
+Note: ig = -1. Setting random seed to   983494 based on wallclock time in 
       microseconds.
 | irandom = 1, using AMBER's internal random number generator (default).
 | INFO:    The nsnb ctrl option does not affect nonbonded list update frequency.
@@ -118,15 +119,15 @@ Note: ig = -1. Setting random seed to   584020 based on wallclock time in
  
 |------------------- GPU DEVICE INFO --------------------
 |
-|            CUDA_VISIBLE_DEVICES: not set
+|            CUDA_VISIBLE_DEVICES: 0
 |   CUDA Capable Devices Detected:      1
 |           CUDA Device ID in use:      0
-|                CUDA Device Name: NVIDIA GeForce GTX 1660 SUPER
-|     CUDA Device Global Mem Size:   5935 MB
-| CUDA Device Num Multiprocessors:     22
-|           CUDA Device Core Freq:   1.83 GHz
+|                CUDA Device Name: NVIDIA A40
+|     CUDA Device Global Mem Size:  45634 MB
+| CUDA Device Num Multiprocessors:     84
+|           CUDA Device Core Freq:   1.74 GHz
 |
 |--------------------------------------------------------
  
 
-  Unit    9 Error on OPEN: l23_3_heat2.rst7                                                                                                                                                                                                                                                
+  Unit    9 Error on OPEN: l23_3_equi.rst7                                                                                                                                                                                                                                                 
