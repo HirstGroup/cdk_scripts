@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
 		outfile.write('complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
 
-	print('complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
+	print('complex check_md check_md_cent check_md_cent_strip check_gbsa')
 
 	for repeat in args.repeat_list:
 
