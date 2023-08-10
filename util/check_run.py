@@ -86,27 +86,29 @@ if __name__ == '__main__':
 	time = args.time
 	verbose = args.verbose
 
-	with open(args.output, 'w') as outfile:
+	if args.output is not None:
+		outfile = open(args.output, 'w')
 
 		outfile.write(f'complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
 
-		for repeat in args.repeat_list:
+	for repeat in args.repeat_list:
 
-			for part in args.part_list:
+		for part in args.part_list:
 
-				if part == '1':
-					part = ''
+			if part == '1':
+				part = ''
 
-				check_md_out = check_md(complex, frames, time + part, repeat, verbose=verbose)
+			check_md_out = check_md(complex, frames, time + part, repeat, verbose=verbose)
 
-				check_md_cent_out = check_md_cent(complex, frames, time + part, repeat, verbose=verbose)			
+			check_md_cent_out = check_md_cent(complex, frames, time + part, repeat, verbose=verbose)			
 
-				check_md_cent_strip_out = check_md_cent_strip(complex, frames, time + part, repeat, verbose=verbose)
+			check_md_cent_strip_out = check_md_cent_strip(complex, frames, time + part, repeat, verbose=verbose)
 
-				check_gbsa_out = check_gbsa(complex, part, repeat, verbose=verbose)
+			check_gbsa_out = check_gbsa(complex, part, repeat, verbose=verbose)
 
-				print(complex, check_md_out, check_md_cent_out, check_md_cent_strip_out, check_gbsa_out)
+			print(complex, check_md_out, check_md_cent_out, check_md_cent_strip_out, check_gbsa_out)
 
+			if args.output is not None:
 				outfile.write(f'{complex} {check_md_out} {check_md_cent_out} {check_md_cent_strip_out} {check_gbsa_out}\n')
 
 
