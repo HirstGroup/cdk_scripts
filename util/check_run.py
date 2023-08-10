@@ -89,7 +89,9 @@ if __name__ == '__main__':
 	if args.output is not None:
 		outfile = open(args.output, 'w')
 
-		outfile.write(f'complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
+		outfile.write('complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
+
+	print('complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
 
 	for repeat in args.repeat_list:
 
