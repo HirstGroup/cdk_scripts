@@ -10,7 +10,7 @@ sys.path.append(f'{file_dir}/../')
 from run import run
 
 
-def count_frames(parm, traj):
+def count_frames(parm, traj, verbose=False):
 	"""
 	Count number of frames in trajectory
 
@@ -35,7 +35,7 @@ def count_frames(parm, traj):
 	with open('count_frames.ptraj', 'w') as f:
 		f.write(string)
 
-	output = run(f'cpptraj {parm} count_frames.ptraj', verbose=False)
+	output = run(f'cpptraj {parm} count_frames.ptraj', verbose=verbose)
 
 	n_frames = parse_count_frames_output(output)
 
