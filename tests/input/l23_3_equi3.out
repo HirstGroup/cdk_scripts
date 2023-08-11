@@ -6,7 +6,7 @@
 | PMEMD implementation of SANDER, Release 18
 
 |  Compiled date/time: Wed Apr 12 15:28:05 2023
-| Run on 08/11/2023 at 11:39:02
+| Run on 08/11/2023 at 11:39:06
 
 |   Executable path: pmemd.cuda
 | Working directory: /home/pczbf/cdk_scripts/tests/input
@@ -14,15 +14,15 @@
   [-O]verwriting output
 
 File Assignments:
-|   MDIN: 09_equi2_3.in                                                         
-|  MDOUT: l23_3_equi2.out                                                       
-| INPCRD: l23_3_equi.rst7                                                       
+|   MDIN: 09_equi3_3.in                                                         
+|  MDOUT: l23_3_equi3.out                                                       
+| INPCRD: l23_3_equi2.rst7                                                      
 |   PARM: l23.parm7                                                             
-| RESTRT: l23_3_equi2.rst7                                                      
+| RESTRT: l23_3_equi3.rst7                                                      
 |   REFC: refc                                                                  
 |  MDVEL: mdvel                                                                 
 |   MDEN: mden                                                                  
-|  MDCRD: l23_3_equi2.nc                                                        
+|  MDCRD: l23_3_equi3.nc                                                        
 | MDINFO: mdinfo                                                                
 |  MDFRC: mdfrc                                                                 
 
@@ -64,7 +64,7 @@ NPT MD w/No position restraints and PME (sander)
  /                                                                             
 
 
-Note: ig = -1. Setting random seed to   152163 based on wallclock time in 
+Note: ig = -1. Setting random seed to   731646 based on wallclock time in 
       microseconds.
 | irandom = 1, using AMBER's internal random number generator (default).
 | INFO:    The nsnb ctrl option does not affect nonbonded list update frequency.
@@ -129,4 +129,4 @@ Note: ig = -1. Setting random seed to   152163 based on wallclock time in
 |--------------------------------------------------------
  
 
-  Unit    9 Error on OPEN: l23_3_equi.rst7                                                                                                                                                                                                                                                 
+  Unit    9 Error on OPEN: l23_3_equi2.rst7                                                                                                                                                                                                                                                

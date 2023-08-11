@@ -2,10 +2,10 @@ NPT MD w/No position restraints and PME (sander)
  &cntrl
   ntx    = 5,
   irest  = 1,
-  ntpr   = 10000,
-  ntwx   = 10000,
-  ntwe   = 10000,
-  ntwr   = 10000,
+  ntpr   = 1000,
+  ntwx   = 1000,
+  ntwe   = 1000,
+  ntwr   = 1000,
   ig     = -1,
 
   ntf    = 1,
@@ -15,7 +15,7 @@ NPT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10,
 
-  nstlim = 20000,
+  nstlim = 2000,
   t      = 0.0,
   nscm   = 1000,
   dt     = 0.002,
@@ -30,4 +30,4 @@ NPT MD w/No position restraints and PME (sander)
 &end
  &ewald
    skinnb=2, nfft1=96, nfft2=96, nfft3=96,
- / 
+ /  

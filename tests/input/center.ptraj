@@ -1,5 +1,5 @@
 
 
-trajin l23_equi.nc 1 last 
+trajin l23_3_equi3.nc 1 last 
 autoimage
-trajout l23_equi_cent.nc		
+trajout l23_3_equi3_cent.nc        
