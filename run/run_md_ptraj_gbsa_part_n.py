@@ -23,17 +23,20 @@ args = parser.parse_args()
 
 first_part = args.first_part
 
+if args.test == 'YES':
+    print_cmd = True
+else:
+    print_cmd = False
+
 cmd = f'sbatch --parsable ~/scripts/1gpu.sh ~/cdk_scripts/standard_md_part.py -c {args.complex} -p {first_part} -r {args.repeat} --test {args.test}'
 
-print(cmd)
-
-out = run(cmd)
+out = run(cmd, print_cmd=print_cmd)
 
 jobid = out.splitlines()[0]
 
 print(f'Submitted batch job {jobid}')
 
-run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {first_part} -r {args.repeat}')
+run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {first_part} -r {args.repeat}', print_cmd=print_cmd)
 
 if args.last_part is not None:
 
@@ -41,12 +44,10 @@ if args.last_part is not None:
 
         cmd = f'sbatch --dependency=afterok:{jobid} --parsable ~/scripts/1gpu.sh ~/cdk_scripts/standard_md_part.py -c {args.complex} -p {part} -r {args.repeat} --test {args.test}'
 
-        print(cmd)
-
-        out = run(cmd)
+        out = run(cmd, print_cmd=print_cmd)
 
         jobid = out.splitlines()[0]
 
         print(f'Submitted batch job {jobid}')
 
-        run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {part} -r {args.repeat}')        
+        run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {part} -r {args.repeat}', print_cmd=print_cmd)        
