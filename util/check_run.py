@@ -89,9 +89,9 @@ if __name__ == '__main__':
 	if args.output is not None:
 		outfile = open(args.output, 'w')
 
-		outfile.write('complex check_md check_md_cent check_md_cent_strip check_gbsa\n')
+		outfile.write('complex_part_repeat check_md check_md_cent check_md_cent_strip check_gbsa\n')
 
-	print('complex check_md check_md_cent check_md_cent_strip check_gbsa')
+	print('complex_part_repeat check_md check_md_cent check_md_cent_strip check_gbsa')
 
 	for repeat in args.repeat_list:
 
@@ -108,10 +108,10 @@ if __name__ == '__main__':
 
 			check_gbsa_out = check_gbsa(complex, part, repeat, verbose=verbose)
 
-			print(complex, check_md_out, check_md_cent_out, check_md_cent_strip_out, check_gbsa_out)
+			print(f'{complex}_{part}{repeat}', check_md_out, check_md_cent_out, check_md_cent_strip_out, check_gbsa_out)
 
 			if args.output is not None:
-				outfile.write(f'{complex} {check_md_out} {check_md_cent_out} {check_md_cent_strip_out} {check_gbsa_out}\n')
+				outfile.write(f'{complex}_{part}{repeat} {check_md_out} {check_md_cent_out} {check_md_cent_strip_out} {check_gbsa_out}\n')
 
 
 

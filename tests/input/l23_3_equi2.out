@@ -5,12 +5,18 @@
 
 | PMEMD implementation of SANDER, Release 18
 
+<<<<<<< HEAD
 |  Compiled date/time: Wed Apr 12 15:28:05 2023
 | Run on 08/11/2023 at 11:39:02
+=======
+|  Compiled date/time: Tue Apr 28 02:19:54 2020
+| Run on 08/10/2023 at 17:02:49
+>>>>>>> 3caf28c7927efb3efc9ed31cde0e362dbae74419
 
 |   Executable path: pmemd.cuda
-| Working directory: /home/pczbf/cdk_scripts/tests/input
-|          Hostname: Unknown
+| Working directory: /gpfs01/home/pczbf/cdk_scripts/tests/input
+|          Hostname: compchem001
+
   [-O]verwriting output
 
 File Assignments:
@@ -64,7 +70,11 @@ NPT MD w/No position restraints and PME (sander)
  /                                                                             
 
 
+<<<<<<< HEAD
 Note: ig = -1. Setting random seed to   152163 based on wallclock time in 
+=======
+Note: ig = -1. Setting random seed to   983494 based on wallclock time in 
+>>>>>>> 3caf28c7927efb3efc9ed31cde0e362dbae74419
       microseconds.
 | irandom = 1, using AMBER's internal random number generator (default).
 | INFO:    The nsnb ctrl option does not affect nonbonded list update frequency.
@@ -118,13 +128,13 @@ Note: ig = -1. Setting random seed to   152163 based on wallclock time in
  
 |------------------- GPU DEVICE INFO --------------------
 |
-|            CUDA_VISIBLE_DEVICES: not set
+|            CUDA_VISIBLE_DEVICES: 0
 |   CUDA Capable Devices Detected:      1
 |           CUDA Device ID in use:      0
-|                CUDA Device Name: NVIDIA GeForce GTX 1660 SUPER
-|     CUDA Device Global Mem Size:   5935 MB
-| CUDA Device Num Multiprocessors:     22
-|           CUDA Device Core Freq:   1.83 GHz
+|                CUDA Device Name: NVIDIA A40
+|     CUDA Device Global Mem Size:  45634 MB
+| CUDA Device Num Multiprocessors:     84
+|           CUDA Device Core Freq:   1.74 GHz
 |
 |--------------------------------------------------------
  
