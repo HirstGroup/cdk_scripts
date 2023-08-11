@@ -1,0 +1,132 @@
+
+          -------------------------------------------------------
+          Amber 20 PMEMD                              2020
+          -------------------------------------------------------
+
+| PMEMD implementation of SANDER, Release 18
+
+|  Compiled date/time: Wed Apr 12 15:28:05 2023
+| Run on 08/11/2023 at 11:37:21
+
+|   Executable path: pmemd.cuda
+| Working directory: /home/pczbf/augusta_sshfs/cdk_scripts/tests/input
+|          Hostname: Unknown
+  [-O]verwriting output
+
+File Assignments:
+|   MDIN: 09_equi5_3.in                                                         
+|  MDOUT: l23_3_equi5.out                                                       
+| INPCRD: l23_3_equi4.rst7                                                      
+|   PARM: l23.parm7                                                             
+| RESTRT: l23_3_equi5.rst7                                                      
+|   REFC: refc                                                                  
+|  MDVEL: mdvel                                                                 
+|   MDEN: mden                                                                  
+|  MDCRD: l23_3_equi5.nc                                                        
+| MDINFO: mdinfo                                                                
+|  MDFRC: mdfrc                                                                 
+
+
+ Here is the input file:
+
+NPT MD w/No position restraints and PME (sander)                               
+ &cntrl                                                                        
+  ntx    = 5,                                                                  
+  irest  = 1,                                                                  
+  ntpr   = 1000,                                                               
+  ntwx   = 1000,                                                               
+  ntwe   = 1000,                                                               
+  ntwr   = 1000,                                                               
+  ig     = -1,                                                                 
+                                                                               
+  ntf    = 1,                                                                  
+  ntb    = 2,                                                                  
+  ntp = 1, pres0 = 1.0, taup = 10.0, gamma_ln = 1.0,                           
+  cut    = 12.0,                                                               
+  iwrap  = 1,                                                                  
+  nsnb   = 10,                                                                 
+                                                                               
+  nstlim = 2000,                                                               
+  t      = 0.0,                                                                
+  nscm   = 1000,                                                               
+  dt     = 0.002,                                                              
+                                                                               
+  temp0  = 300.0,                                                              
+  tempi  = 300.0,                                                              
+  ntt    = 3,                                                                  
+  tautp  = 2.0,                                                                
+                                                                               
+  ntc = 2, !Flag for SHAKE to perform bond length constraints. = 2 bonds involv
+  iwrap=1, ioutfm=1, ntwv=-1,ntave=1000,                                       
+&end                                                                           
+ &ewald                                                                        
+   skinnb=2, nfft1=96, nfft2=96, nfft3=96,                                     
+ /                                                                             
+
+
+Note: ig = -1. Setting random seed to   777690 based on wallclock time in 
+      microseconds.
+| irandom = 1, using AMBER's internal random number generator (default).
+| INFO:    The nsnb ctrl option does not affect nonbonded list update frequency.
+|          It does affect steepest descent minimization freq if ntmin == 0
+ 
+|--------------------- INFORMATION ----------------------
+| GPU (CUDA) Version of PMEMD in use: NVIDIA GPU IN USE.
+|                    Version 18.0.0
+| 
+|                      03/25/2018
+| 
+| Implementation by:
+|                    Ross C. Walker     (SDSC)
+|                    Scott Le Grand     (nVIDIA)
+| 
+| Version 18 performance extensions by:
+|                    David Cerutti     (Rutgers)
+| 
+| Precision model in use:
+|      [SPFP] - Single Precision Forces, 64-bit Fixed Point
+|               Accumulation. (Default)
+| 
+|--------------------------------------------------------
+ 
+|----------------- CITATION INFORMATION -----------------
+|
+|    When publishing work that utilized the CUDA version
+|    of AMBER, please cite the following in addition to
+|    the regular AMBER citations:
+|
+|  - Romelia Salomon-Ferrer; Andreas W. Goetz; Duncan
+|    Poole; Scott Le Grand; Ross C. Walker "Routine
+|    microsecond molecular dynamics simulations with
+|    AMBER - Part II: Particle Mesh Ewald", J. Chem.
+|    Theory Comput., 2013, 9 (9), pp3878-3888,
+|    DOI: 10.1021/ct400314y.
+|
+|  - Andreas W. Goetz; Mark J. Williamson; Dong Xu;
+|    Duncan Poole; Scott Le Grand; Ross C. Walker
+|    "Routine microsecond molecular dynamics simulations
+|    with AMBER - Part I: Generalized Born", J. Chem.
+|    Theory Comput., 2012, 8 (5), pp1542-1555.
+|
+|  - Scott Le Grand; Andreas W. Goetz; Ross C. Walker
+|    "SPFP: Speed without compromise - a mixed precision
+|    model for GPU accelerated molecular dynamics
+|    simulations.", Comp. Phys. Comm., 2013, 184
+|    pp374-380, DOI: 10.1016/j.cpc.2012.09.022
+|
+|--------------------------------------------------------
+ 
+|------------------- GPU DEVICE INFO --------------------
+|
+|            CUDA_VISIBLE_DEVICES: not set
+|   CUDA Capable Devices Detected:      1
+|           CUDA Device ID in use:      0
+|                CUDA Device Name: NVIDIA GeForce GTX 1660 SUPER
+|     CUDA Device Global Mem Size:   5935 MB
+| CUDA Device Num Multiprocessors:     22
+|           CUDA Device Core Freq:   1.83 GHz
+|
+|--------------------------------------------------------
+ 
+
+  Unit    9 Error on OPEN: l23_3_equi4.rst7                                                                                                                                                                                                                                                

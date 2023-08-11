@@ -32,10 +32,10 @@ def center_strip(complex, ignore_errors=False, repeat='', time='equi'):
     trajout {complex}{repeat}_{time}_cent.nc        
     ''')
 
-    with open('center.ptraj', 'w') as f:
+    with open('center{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 center.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 center{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
 
     string = textwrap.dedent(f'''\
     trajin {complex}{repeat}_{time}_cent.nc 
@@ -44,20 +44,20 @@ def center_strip(complex, ignore_errors=False, repeat='', time='equi'):
     trajout {complex}{repeat}_{time}_cent_strip.nc
     ''')
 
-    with open('strip.ptraj', 'w') as f:
+    with open('strip{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 strip.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 strip{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
 
     string = textwrap.dedent(f'''\
     parmstrip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
     parmwrite out {complex}_strip.parm7
     ''')
 
-    with open('parmstrip.ptraj', 'w') as f:
+    with open('parmstrip{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 parmstrip.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 parmstrip{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
 
 
 if __name__ == '__main__':
@@ -91,11 +91,11 @@ if __name__ == '__main__':
     if args.repeat == 'NO':
         args.repeat = ''
 
-    center_strip(args.input, ignore_errors=ignore_errors, repeat=args.repeat, time=args.time + args.part)
+    center_strip(args.input, ignore_errors=ignore_errors, repeat=args.repeat, time=f'{args.time}{args.part}')
 
     if args.delete:
         try:
-            delete_mds(args.input, repeat=args.repeat, time=args.time + args.part)
+            delete_mds(args.input, repeat=args.repeat, time=f'{args.time}{args.part}')
         except:
             if not ignore_errors:
                 raise Exception('Errors occured in delete_mds, exit')
