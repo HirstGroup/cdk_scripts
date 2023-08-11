@@ -6,6 +6,7 @@ set -e
 ignore_errors=NO
 part=NO
 repeat=NO
+test=NO
 
 while [[ $# > 0 ]]
 do
@@ -28,6 +29,10 @@ case $key in
     repeat="$2"
     shift
     ;;
+    --test)
+    test="$2"
+    shift
+    ;;
     *)
     echo "Unknown argument: $1"
     exit 1
@@ -38,5 +43,5 @@ done
 
 echo $ignore
 
-python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -p $part --delete --ignore_errors ${ignore_errors}
-python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat"
+python ~/cdk_scripts/ptraj.py -i $complex -r "$repeat" -p $part --delete --ignore_errors ${ignore_errors} --test $test
+python ~/cdk_scripts/gbsa.py -i $complex -p "$part" -r "$repeat" --test $test

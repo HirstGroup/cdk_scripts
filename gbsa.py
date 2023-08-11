@@ -7,7 +7,7 @@ import textwrap
 from run import run
 
 
-def antegbsa(complex, part='', repeat=''):
+def antegbsa(complex, part='', print_cmd=False, repeat=''):
     """
     Run ante-MMPBSA.py to prepare topolopy files for MMPBSA.py
 
@@ -33,12 +33,12 @@ def antegbsa(complex, part='', repeat=''):
     os.chdir(f'gbsa{part}{repeat}')
     os.system(f'rm -f {complex}-complex.parm7 {complex}-receptor.parm7 {complex}-ligand.parm7')
 
-    run(f'ante-MMPBSA.py -p ../{complex}.parm7 -c {complex}-complex.parm7 -r {complex}-receptor.parm7 -l {complex}-ligand.parm7 --strip-mask=:WAT:CL:NA --ligand-mask=:{ligandmask} --radii=mbondi2')
+    run(f'ante-MMPBSA.py -p ../{complex}.parm7 -c {complex}-complex.parm7 -r {complex}-receptor.parm7 -l {complex}-ligand.parm7 --strip-mask=:WAT:CL:NA --ligand-mask=:{ligandmask} --radii=mbondi2', print_cmd=print_cmd)
 
     os.chdir('../')
 
 
-def gbsa(complex, part='', repeat=''):
+def gbsa(complex, part='', print_cmd=False, repeat=''):
     """
     Run MMPBSA.py
 
@@ -70,7 +70,7 @@ def gbsa(complex, part='', repeat=''):
     with open('gbsa.in', 'w') as f:
         f.write(string)
 
-    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{part}{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi{part}_cent_strip.nc')
+    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{part}{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi{part}_cent_strip.nc', print_cmd=print_cmd)
 
     os.system('rm *.nc.0 reference.frc')    
 
@@ -89,6 +89,7 @@ if __name__ == '__main__':
     parser.add_argument('-f','--functions', nargs='+', help='Function names to run', required=False)
     parser.add_argument('-p', '--part', default='', help='Part pattern to run second MD, etc, e.g. 2, 3', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
+    parser.add_argument('--test', default='NO', help='Test run', required=False)
 
     args = parser.parse_args()
 
@@ -103,15 +104,20 @@ if __name__ == '__main__':
     if args.repeat == 'NO':
         args.repeat = ''
 
+    if args.test == 'YES':
+        print_cmd = True
+    else:
+        print_cmd = False
+
     if args.functions is None:
-        antegbsa(complex, part=args.part, repeat=args.repeat)
-        gbsa(complex, part=args.part, repeat=args.repeat)
+        antegbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
+        gbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
 
     else:
         if 'antegbsa' in args.functions:
-            antegbsa(complex, args.part, args.repeat)
+            antegbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
         if 'gbsa' in args.functions:
-            gbsa(complex, args.part, args.repeat)
+            gbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
 
     if args.cd:
         os.chdir('../')

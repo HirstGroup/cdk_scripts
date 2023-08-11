@@ -73,6 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--part', default='', help='Part pattern, e.g. 2, 3', required=False)
     parser.add_argument('-r', '--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
+    parser.add_argument('--test', default='NO', help='Test run', required=False)
     parser.add_argument('--delete', action='store_true', help='Delete original MD trajectory files', required=False)
 
     args = parser.parse_args()
@@ -91,7 +92,12 @@ if __name__ == '__main__':
     if args.repeat == 'NO':
         args.repeat = ''
 
-    center_strip(args.input, ignore_errors=ignore_errors, repeat=args.repeat, time=f'{args.time}{args.part}')
+    if args.test == 'YES':
+        print_cmd = True
+    else:
+        print_cmd = False
+
+    center_strip(args.input, ignore_errors=ignore_errors, print_cmd=print_cmd, repeat=args.repeat, time=f'{args.time}{args.part}')
 
     if args.delete:
         try:

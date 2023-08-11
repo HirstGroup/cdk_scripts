@@ -36,7 +36,7 @@ jobid = out.splitlines()[0]
 
 print(f'Submitted batch job {jobid}')
 
-run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {first_part} -r {args.repeat}', print_cmd=print_cmd)
+run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {first_part} -r {args.repeat} --test {args.test}', print_cmd=print_cmd)
 
 if args.last_part is not None:
 
@@ -50,4 +50,4 @@ if args.last_part is not None:
 
         print(f'Submitted batch job {jobid}')
 
-        run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {part} -r {args.repeat}', print_cmd=print_cmd)        
+        run(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh ~/cdk_scripts/run/run_ptraj_gbsa.sh -c {args.complex} -p {part} -r {args.repeat} --test {args.test}', print_cmd=print_cmd)        
