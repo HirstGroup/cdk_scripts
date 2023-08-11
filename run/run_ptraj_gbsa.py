@@ -45,7 +45,13 @@ for part in range(args.first_part, args.last_part + 1):
 
     center_strip(args.complex, ignore_errors=ignore_errors, print_cmd=print_cmd, repeat=args.repeat, time=f'{args.time}{part}')
     
-    delete_mds(args.complex, repeat=args.repeat, time=f'{args.time}{part}')
+    try:
+        delete_mds(args.complex, repeat=args.repeat, time=f'{args.time}{part}')
+    except:
+        if ignore_errors:
+            print('Errors in delete_mds ignored')
+        else:
+            raise Exception('Errors in delete_mds')
 
     antegbsa(args.complex, part=part, print_cmd=print_cmd, repeat=args.repeat)
     

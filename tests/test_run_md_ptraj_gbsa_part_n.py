@@ -36,4 +36,21 @@ def test2():
 	os.chdir('../')
 
 
-test2()
+def test3():
+	# Test for parts 2 to 10 and no repeat
+
+	os.system('rm -rf output/*')
+	os.system('cp input/l23.parm7 output/')
+	os.system('cp input/l23_heat2.rst7 output/l23_equi.rst7')
+
+	os.chdir('output')
+
+	os.system('python ../../run/run_md_ptraj_gbsa_part_n.py -c l23 -fp 2 -lp 10 --sequential --test YES')
+
+	for i in range(2,11):
+		for file_name in f'l23_equi{i}.out l23_equi{i}.rst7 l23_equi{i}_cent_strip.nc gbsa{i}/l23_gbsa{i}.dat'.split():
+			assert os.path.exists(file_name)
+
+	os.chdir('../')
+
+test3()
