@@ -65,7 +65,7 @@ def execute(cmd, ignore_errors=False):
             raise subprocess.CalledProcessError(return_code, cmd)
 
 
-def run(cmd, ignore_errors=False, verbose=True):
+def run(cmd, ignore_errors=False, print_cmd=False, verbose=True):
     """
     Run a command, print output lines one by one and return all output
 
@@ -81,6 +81,8 @@ def run(cmd, ignore_errors=False, verbose=True):
     """
 
     lines = []
+
+    if print_cmd: print(cmd)
 
     for line in execute(cmd, ignore_errors=ignore_errors):
         if verbose: print(line, end="")

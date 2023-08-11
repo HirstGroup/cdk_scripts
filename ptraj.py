@@ -8,7 +8,7 @@ from util.delete_md import delete_mds
 from run import run
 
 
-def center_strip(complex, ignore_errors=False, repeat='', time='equi'):
+def center_strip(complex, ignore_errors=False, print_cmd=False, repeat='', time='equi'):
     """
     Center and strip MD trajectory
 
@@ -32,10 +32,10 @@ def center_strip(complex, ignore_errors=False, repeat='', time='equi'):
     trajout {complex}{repeat}_{time}_cent.nc        
     ''')
 
-    with open('center{repeat}_{time}.ptraj', 'w') as f:
+    with open(f'center{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 center{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 center{repeat}_{time}.ptraj', ignore_errors=ignore_errors, print_cmd=print_cmd)
 
     string = textwrap.dedent(f'''\
     trajin {complex}{repeat}_{time}_cent.nc 
@@ -44,20 +44,20 @@ def center_strip(complex, ignore_errors=False, repeat='', time='equi'):
     trajout {complex}{repeat}_{time}_cent_strip.nc
     ''')
 
-    with open('strip{repeat}_{time}.ptraj', 'w') as f:
+    with open(f'strip{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 strip{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 strip{repeat}_{time}.ptraj', ignore_errors=ignore_errors, print_cmd=print_cmd)
 
     string = textwrap.dedent(f'''\
     parmstrip :DMS:CL3:WAT:NA:CL:ETA:Na+:Cl-
     parmwrite out {complex}_strip.parm7
     ''')
 
-    with open('parmstrip{repeat}_{time}.ptraj', 'w') as f:
+    with open(f'parmstrip{repeat}_{time}.ptraj', 'w') as f:
         f.write(string)
 
-    run(f'cpptraj {complex}.parm7 parmstrip{repeat}_{time}.ptraj', ignore_errors=ignore_errors)
+    run(f'cpptraj {complex}.parm7 parmstrip{repeat}_{time}.ptraj', ignore_errors=ignore_errors, print_cmd=print_cmd)
 
 
 if __name__ == '__main__':
