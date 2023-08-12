@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(description='Run a part of an MD (i.e. sequenti
 
 # Required arguments
 parser.add_argument('-c','--complex', help='Name of complexes to run', required=True)
-parser.add_argument('-fp', '--first_part', type=int, help='First part to run MD, etc, e.g. 2, 3', required=False)
+parser.add_argument('-fp', '--first_part', type=int, help='First part to run MD, etc, e.g. 2, 3', required=True)
 parser.add_argument('-lp', '--last_part', type=int, help='Last part to run MD, etc, e.g. 2, 3', required=True)
 
 # Optional arguments
