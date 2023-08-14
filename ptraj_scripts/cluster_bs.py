@@ -135,12 +135,12 @@ if __name__ == '__main__':
     parser.add_argument('-c','--complex', help='Name of complexes to run', required=True)
 
     # Optional arguments
+    parser.add_argument('-e', '--epsilon', type=int, help='Epsilon value to to clustering', required=False)
     parser.add_argument('-i', '--interval', type=int, help='Interval to analyse trajectories', required=False)
-
     parser.add_argument('-r','--repeat', default='NO', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
 
     args = parser.parse_args()
 
-    cluster_bs()
+    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, repeat=args.repeat, time=args.time)
 
