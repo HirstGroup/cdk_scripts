@@ -94,7 +94,7 @@ def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', rep
     parm = f'../{complex}_strip.parm7'
     traj = f'../{complex}{repeat}_{time}_cent_strip.nc'
 
-    folder = f'cluster{repeat}_{time}_{interval}'
+    folder = f'cluster{repeat}_{time}_{interval}_{epsilon}'
 
     if not os.path.exists(folder):
         os.makedirs(folder)
