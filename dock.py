@@ -104,7 +104,7 @@ def dock(ligname):
     os.system(cmd)
 
 
-def dock_conf(ligname, folder_in, folder_out):
+def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100):
     """
     Dock molecule generating conformers for cycles using OpenEye (gnina does not generate conformers for cycles)
 
@@ -116,11 +116,18 @@ def dock_conf(ligname, folder_in, folder_out):
         folder where input file is located
     folder_out:
         folder where output files will be written to
+    exhaustiveness : int, optional
+        exhaustiveness to do docking calculation
 
     Returns
     -------
     None (writes docking sdf and out files for each conformer in output folder and then gets best conformation and writes it to *best.sdf and *best.out)
     """
+
+    if exhaustiveness is not None:
+        exhaustiveness = f'--exhaustiveness {exhaustiveness}'
+    else:
+        exhaustiveness = ''
 
     import generate_conformers_openeye
 
@@ -132,7 +139,7 @@ def dock_conf(ligname, folder_in, folder_out):
 
     # dock individual SDF files
     for i in range(n_files):
-        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock.sdf --log {folder_out}/{ligname}_confs_{i}_dock.out')
+        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock.sdf --log {folder_out}/{ligname}_confs_{i}_dock.out {exhaustiveness}')
 
 
     # get lowest energy docking conformation
@@ -145,6 +152,7 @@ def dock_conf(ligname, folder_in, folder_out):
 
     os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.sdf {folder_out}/{ligname}_confs_dock_best.sdf')
     os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.out {folder_out}/{ligname}_confs_dock_best.out')
+
 
 def write_gnina_output(score, outfile):
     """
@@ -173,7 +181,7 @@ def dock_row(row):
 
     for ligname in row['resname_list'].split('&'):
 
-        dock_conf(f'{ligname.lower()}', 'ligands', 'dock_conf')
+        dock_conf(f'{ligname.lower()}', 'ligands', 'dock_conf_ex100')
 
 
 def dock_parallel(df):
@@ -193,7 +201,7 @@ def dock_parallel(df):
 
 def parse_dock(infile):
     """
-    Parse docking score from gnina output
+    Parse docking score (affinity in kcal/mol) from gnina output
 
     Parameters
     ----------

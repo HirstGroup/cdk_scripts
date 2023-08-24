@@ -4,12 +4,15 @@ import argparse
 import numpy as np
 import pandas as pd
 import sys
+import warnings
 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from itertools import combinations
+
+warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
 parser = argparse.ArgumentParser(description='Analyze convergence of GBSA')
 
@@ -32,6 +35,20 @@ df.dropna(inplace=True)
 a = list(range(1,args.n_repeats+1))
 
 df['gbsa_4_delta_total'] = df['gbsa_4_10_delta_total']
+
+columns = df.columns
+
+col_to_keep = []
+for col in columns:
+	if 'gbsa' in col:
+		if 'delta_total' in col:
+			col_to_keep.append(col)
+	else:
+		col_to_keep.append(col)
+
+df = df[col_to_keep]
+
+df.to_csv(args.output, sep=';', index=False)
 
 df[f'gbsa{part}_1_delta_total'] = df[f'gbsa{part}_delta_total']
 
@@ -62,8 +79,6 @@ def get_avg(d, part=''):
 			k = [str(x) for x in j]
 
 			name = '_'.join(k)
-
-			print(name)
 
 			df[f'gbsa{part}_{name}'] = 0
 
@@ -136,7 +151,6 @@ d = make_dict_combinations(a)
 get_avg(d, part=part)
 
 d_names = make_dict_names(d, part=part)
-print(d_names)
 
 get_std(d_names, part=part)
 
@@ -145,5 +159,13 @@ plot_std(part=part)
 if args.output is not None:
 	df.to_csv(args.output, sep=';', index=False)
 
-print(df)
+for key, val in d_names.items():
+	print(val[-1])
 
+cols = ['ligand','ligname','Ki','Ki_error', f'gbsa{args.part}_1_2_3_4_5_6_7_8_9_10']
+
+df = df[cols]
+
+df.to_csv(f'{args.part}_avg.csv', sep=';', index=False)
+
+print(df)

@@ -65,6 +65,7 @@ def test_parse_dock():
 
     assert score == -8.96
 
+
 def test_write_gnina_output():
 
     score = parse_dock('input/1-1_confs_0_dock.out')
@@ -75,5 +76,12 @@ def test_write_gnina_output():
 
     assert score == score2
 
-test_split_sdf_max2()
 
+def test_dock_conf_exhaustiveness():
+
+    os.system('rm -rf output/*')
+
+    os.system('cp input/6td3_protein.pdb output/')
+
+    dock_conf('1-1', 'input', 'output', exhaustiveness=10)
+test_dock_conf_exhaustiveness()
