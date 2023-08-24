@@ -50,7 +50,7 @@ def get_range_tuple(resid_list):
     yield q[i], q[-1]
 
 
-def get_bs_mask(frames, LIG, parm, traj, interval=1):
+def get_bs_mask(frames, mask, parm, traj, interval=1):
     """
     Get mask of residues in binding site
     """
@@ -62,7 +62,7 @@ def get_bs_mask(frames, LIG, parm, traj, interval=1):
 
     string = textwrap.dedent(f'''\
     trajin ../{traj} 1 last {interval}
-    mask :{LIG}<:4.0 maskpdb resid_4a.pdb
+    mask :{mask}<:4.0 maskpdb resid_4a.pdb
     ''')
 
     with open('mask.ptraj', 'w') as f:
@@ -83,15 +83,16 @@ def get_bs_mask(frames, LIG, parm, traj, interval=1):
     return amber_range
 
 
-def cluster_bs(complex, epsilon=1, interval=1, repeat='', time='equi'):
+def cluster_bs(complex, epsilon=1, interval=1, mask=None, repeat='', time='equi'):
     """
     Cluster trajectory by distance to ligand in binding site
     """
 
+    if mask is None:
+        mask = complex.upper()
+
     parm = f'../{complex}_strip.parm7'
     traj = f'../{complex}{repeat}_{time}_cent_strip.nc'
-
-    LIG = complex.upper()
 
     folder = f'cluster{repeat}_{time}_{interval}'
 
@@ -102,13 +103,13 @@ def cluster_bs(complex, epsilon=1, interval=1, repeat='', time='equi'):
 
     frames = count_frames(parm, traj, verbose=True)
 
-    mask = get_bs_mask(frames, LIG, parm, traj, interval=interval)
+    mask = get_bs_mask(frames, mask, parm, traj, interval=interval)
 
     string = textwrap.dedent(f'''\
     trajin {traj} 1 last {interval}
     cluster {complex} \
     dbscan minpoints 2 epsilon {epsilon} sievetoframe \
-    rms :{LIG} nofit \
+    rms :{mask} nofit \
     sieve 1 random \
     pairdist pairdist.dat \
     out cnumvtime.dat \
@@ -133,14 +134,15 @@ if __name__ == '__main__':
 
     # Required arguments
     parser.add_argument('-c','--complex', help='Name of complexes to run', required=True)
+    parser.add_argument('-e', '--epsilon', type=int, help='Epsilon value to to clustering', required=True)
 
     # Optional arguments
-    parser.add_argument('-e', '--epsilon', type=int, help='Epsilon value to to clustering', required=False)
     parser.add_argument('-i', '--interval', default=1, type=int, help='Interval to analyse trajectories', required=False)
+    parser.add_argument('-m', '--mask', help='Mask to cluster around', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
 
     args = parser.parse_args()
 
-    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, repeat=args.repeat, time=args.time)
+    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, mask=args.mask, repeat=args.repeat, time=args.time)
 
