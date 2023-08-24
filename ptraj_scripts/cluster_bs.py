@@ -83,7 +83,7 @@ def get_bs_mask(frames, mask, parm, traj, interval=1):
     return amber_range
 
 
-def cluster_bs(complex, epsilon=1, interval=1, mask=None, repeat='', time='equi'):
+def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', repeat='', time='equi'):
     """
     Cluster trajectory by distance to ligand in binding site
     """
@@ -105,20 +105,42 @@ def cluster_bs(complex, epsilon=1, interval=1, mask=None, repeat='', time='equi'
 
     mask = get_bs_mask(frames, mask, parm, traj, interval=interval)
 
-    string = textwrap.dedent(f'''\
-    trajin {traj} 1 last {interval}
-    cluster {complex} \
-    dbscan minpoints 2 epsilon {epsilon} sievetoframe \
-    rms :{mask} nofit \
-    sieve 1 random \
-    pairdist pairdist.dat \
-    out cnumvtime.dat \
-    sil Sil \
-    summary summary.dat \
-    info info.dat \
-    cpopvtime cpopvtime.agr normframe \
-    repout {complex}_{time}_{epsilon} repfmt pdb       
-    ''')
+    if method == 'dbscan':
+        string = textwrap.dedent(f'''\
+        trajin {traj} 1 last {interval}
+        cluster {complex} \
+        dbscan minpoints 2 epsilon {epsilon} sievetoframe \
+        rms :{mask} nofit \
+        sieve 1 random \
+        pairdist pairdist.dat \
+        out cnumvtime.dat \
+        sil Sil \
+        summary summary.dat \
+        info info.dat \
+        cpopvtime cpopvtime.agr normframe \
+        repout {complex}_{time}_{epsilon} repfmt pdb       
+        ''')
+
+    elif method == 'hieragglo':
+        string = textwrap.dedent(f'''\
+        trajin {traj} 1 last {interval}
+        cluster {complex} \
+        hieragglo epsilon {epsilon} complete epsilonplot {complex}_epsilon.dat \
+        srmsd * \
+        out cnumvtime.dat \
+        sil Sil \
+        summary summary.dat \
+        info info.dat \
+        pairdist pairdist.dat \
+        cpopvtime cpopvtime.agr normframe \
+        repout rep repfmt pdb \
+        singlerepout singlerep.nc singlerepfmt netcdf \
+        avgout Avg avgfmt restart \
+        clusterout {complex} clusterfmt netcdf
+        ''')
+
+    else:
+        raise Exception(f'Method {method} not implemented')
 
     with open('cluster.ptraj', 'w') as f:
         f.write(string)
@@ -134,15 +156,16 @@ if __name__ == '__main__':
 
     # Required arguments
     parser.add_argument('-c','--complex', help='Name of complexes to run', required=True)
-    parser.add_argument('-e', '--epsilon', type=int, help='Epsilon value to to clustering', required=True)
+    parser.add_argument('-e', '--epsilon', type=float, help='Epsilon value to to clustering', required=True)
 
     # Optional arguments
     parser.add_argument('-i', '--interval', default=1, type=int, help='Interval to analyse trajectories', required=False)
     parser.add_argument('-m', '--mask', help='Mask to cluster around', required=False)
+    parser.add_argument('--method', default='dbscan', help='Method used to do clustering', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
 
     args = parser.parse_args()
 
-    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, mask=args.mask, repeat=args.repeat, time=args.time)
+    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, mask=args.mask, method=args.method, repeat=args.repeat, time=args.time)
 
