@@ -161,7 +161,7 @@ if __name__ == '__main__':
     # Optional arguments
     parser.add_argument('-i', '--interval', default=1, type=int, help='Interval to analyse trajectories', required=False)
     parser.add_argument('-m', '--mask', help='Mask to cluster around', required=False)
-    parser.add_argument('--method', default='dbscan', help='Method used to do clustering', required=False)
+    parser.add_argument('--method', default='dbscan', help='Method used to do clustering, options are dbscan and hieragglo', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
 
