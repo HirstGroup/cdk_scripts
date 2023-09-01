@@ -104,7 +104,7 @@ def dock(ligname):
     os.system(cmd)
 
 
-def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100):
+def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat=''):
     """
     Dock molecule generating conformers for cycles using OpenEye (gnina does not generate conformers for cycles)
 
@@ -131,27 +131,28 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100):
 
     import generate_conformers_openeye
 
-    # generate conformers with OpenEye
-    generate_conformers_openeye.oe_conformer_generation2(f'{folder_in}/{ligname}', f'{folder_out}/{ligname}', tauto_sp23=False, torsion_drive=False, box_cen=None, save_mol2=True, save_conf_isomer_ids=True)
+    if repeat == '' or repeat == '_1':
+        # generate conformers with OpenEye
+        generate_conformers_openeye.oe_conformer_generation2(f'{folder_in}/{ligname}', f'{folder_out}/{ligname}', tauto_sp23=False, torsion_drive=False, box_cen=None, save_mol2=True, save_conf_isomer_ids=True)
 
     # split SDF file
     n_files = split_sdf(f'{folder_out}/{ligname}_confs.sdf')
 
     # dock individual SDF files
     for i in range(n_files):
-        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock.sdf --log {folder_out}/{ligname}_confs_{i}_dock.out {exhaustiveness}')
+        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock{repeat}.sdf --log {folder_out}/{ligname}_confs_{i}_dock{repeat}.out {exhaustiveness}')
 
 
     # get lowest energy docking conformation
     score_list = []
 
     for i in range(n_files):
-        score_list.append(parse_dock(f'{folder_out}/{ligname}_confs_{i}_dock.out'))
+        score_list.append(parse_dock(f'{folder_out}/{ligname}_confs_{i}_dock{repeat}.out'))
 
     index_min = np.argmin(score_list)
 
-    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.sdf {folder_out}/{ligname}_confs_dock_best.sdf')
-    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock.out {folder_out}/{ligname}_confs_dock_best.out')
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.sdf {folder_out}/{ligname}_confs_dock{repeat}_best.sdf')
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.out {folder_out}/{ligname}_confs_dock{repeat}_best.out')
 
 
 def write_gnina_output(score, outfile):
