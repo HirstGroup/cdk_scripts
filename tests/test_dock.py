@@ -84,4 +84,45 @@ def test_dock_conf_exhaustiveness():
     os.system('cp input/6td3_protein.pdb output/')
 
     dock_conf('1-1', 'input', 'output', exhaustiveness=10)
-test_dock_conf_exhaustiveness()
+
+
+def test_dock_conf_repeat():
+
+    os.system('rm -rf output/*')
+
+    os.system('cp input/6td3_protein.pdb output/')
+
+    dock_conf('1-1', 'input', 'output', exhaustiveness=10, repeat=f'_1', seed=100)
+
+    assert filecmp.cmp('input/1-1_confs_0_dock_1.sdf', 'output/1-1_confs_0_dock_1.sdf')
+    assert filecmp.cmp('input/1-1_confs_0_dock_1.out', 'output/1-1_confs_0_dock_1.out')
+    assert filecmp.cmp('output/1-1_confs_0_dock_1.out', 'output/1-1_confs_dock_best_1.out')
+    assert filecmp.cmp('output/1-1_confs_0_dock_1.sdf', 'output/1-1_confs_dock_best_1.sdf')
+
+    dock_conf('1-1', 'input', 'output', exhaustiveness=10, repeat=f'_2', seed=2)    
+
+    assert filecmp.cmp('input/1-1_confs_0_dock_2.sdf', 'output/1-1_confs_0_dock_2.sdf')
+    assert filecmp.cmp('input/1-1_confs_0_dock_2.out', 'output/1-1_confs_0_dock_2.out')
+    assert filecmp.cmp('output/1-1_confs_0_dock_2.out', 'output/1-1_confs_dock_best_2.out')
+    assert filecmp.cmp('output/1-1_confs_0_dock_2.sdf', 'output/1-1_confs_dock_best_2.sdf')
+
+
+def test_parse_dock_repeat_row():
+
+    row = dict()
+
+    row['Covalent'] = False
+
+    row['resname_list'] = '1-1'
+
+    #os.chdir('input')
+
+    score_avg = parse_dock_repeat_row(row, repeat=1, folder='input')
+
+    assert score_avg + 7.83 < 0.01
+
+    print(score_avg)
+
+    #os.chdir('../')
+
+test_parse_dock_repeat_row()

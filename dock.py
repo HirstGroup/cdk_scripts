@@ -104,7 +104,7 @@ def dock(ligname):
     os.system(cmd)
 
 
-def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat=''):
+def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat='', seed=None):
     """
     Dock molecule generating conformers for cycles using OpenEye (gnina does not generate conformers for cycles)
 
@@ -129,6 +129,11 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat=''):
     else:
         exhaustiveness = ''
 
+    if seed is not None:
+        seed = f'--seed {seed}'
+    else:
+        seed = ''
+
     import generate_conformers_openeye
 
     if repeat == '' or repeat == '_1':
@@ -140,7 +145,7 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat=''):
 
     # dock individual SDF files
     for i in range(n_files):
-        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock{repeat}.sdf --log {folder_out}/{ligname}_confs_{i}_dock{repeat}.out {exhaustiveness}')
+        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock{repeat}.sdf --log {folder_out}/{ligname}_confs_{i}_dock{repeat}.out {exhaustiveness} {seed}')
 
 
     # get lowest energy docking conformation
@@ -151,8 +156,8 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat=''):
 
     index_min = np.argmin(score_list)
 
-    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.sdf {folder_out}/{ligname}_confs_dock{repeat}_best.sdf')
-    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.out {folder_out}/{ligname}_confs_dock{repeat}_best.out')
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.sdf {folder_out}/{ligname}_confs_dock_best{repeat}.sdf')
+    os.system(f'cp {folder_out}/{ligname}_confs_{index_min}_dock{repeat}.out {folder_out}/{ligname}_confs_dock_best{repeat}.out')
 
 
 def write_gnina_output(score, outfile):
@@ -258,6 +263,38 @@ def parse_dock_row(row):
         ligname = LIG.lower()
 
         score_list.append(parse_dock(f'dock_conf/{ligname}_confs_dock_best.out'))
+
+    score_avg = np.mean(score_list)
+
+    return score_avg
+
+
+def parse_dock_repeat_row(row, repeat, folder='dock_conf_ex100'):
+    """
+    Parse dock output row by row taking average of stereoisomers
+
+    Parameters
+    ----------
+    row: pandas row
+    repeat : int
+        Repeat number of docking run
+
+    Returns
+    -------
+    score_avg: float
+        average of docking scores for all stereoisomers
+    """
+
+    if row['Covalent'] == True:
+        return None
+
+    score_list = []
+
+    for x, LIG in enumerate(row['resname_list'].split('&')):
+
+        ligname = LIG.lower()
+
+        score_list.append(parse_dock(f'{folder}/{ligname}_confs_dock_best_{repeat}.out'))
 
     score_avg = np.mean(score_list)
 
