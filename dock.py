@@ -290,13 +290,19 @@ def parse_dock_repeat_row(row, repeat, folder='dock_conf_ex100'):
 
     score_list = []
 
-    for x, LIG in enumerate(row['resname_list'].split('&')):
+    try:
 
-        ligname = LIG.lower()
+        for x, LIG in enumerate(row['resname_list'].split('&')):
 
-        score_list.append(parse_dock(f'{folder}/{ligname}_confs_dock_best_{repeat}.out'))
+            ligname = LIG.lower()
 
-    score_avg = np.mean(score_list)
+            score_list.append(parse_dock(f'{folder}/{ligname}_confs_dock_{repeat}_best.out'))
+
+        score_avg = np.mean(score_list)
+
+    except:
+
+        score_avg = None
 
     return score_avg
 

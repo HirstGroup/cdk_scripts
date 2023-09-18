@@ -7,7 +7,7 @@ import textwrap
 from run import run
 
 
-def antegbsa(complex, part='', print_cmd=False, repeat=''):
+def antegbsa(complex, ligandmask=None, part='', print_cmd=False, repeat=''):
     """
     Run ante-MMPBSA.py to prepare topolopy files for MMPBSA.py
 
@@ -25,7 +25,8 @@ def antegbsa(complex, part='', print_cmd=False, repeat=''):
     None (runs ante-MMPBSA.py)
     """
 
-    ligandmask = complex.upper()
+    if ligandmask is None:
+        ligandmask = complex.split('_')[1].upper()
 
     if not os.path.exists(f'gbsa{part}{repeat}'):
         os.makedirs(f'gbsa{part}{repeat}')
