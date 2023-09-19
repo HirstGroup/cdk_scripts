@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser(description='Run MD ptraj and gbsa')
 parser.add_argument('-c','--complex', help='Name of complex', required=True)
 
 # Optional arguments
-parser.add_argument('-p', '--part', default='', help='Part pattern to run second MD, etc, e.g. 2, 3', required=False)
+parser.add_argument('-p', '--part', default='NO', help='Part pattern to run second MD, etc, e.g. 2, 3', required=False)
 parser.add_argument('-r','--repeat', default='NO', help='Repeat pattern, e.g. _2, _3', required=False)
 parser.add_argument('-t','--test', default='NO', help='Run as a test', required=False)
 
