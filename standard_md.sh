@@ -44,12 +44,18 @@ if [ $repeat = "NO" ]; then
 repeat=""
 fi 
 
+maxcyc=20000
+
+if [ $test = "YES" ]; then
+maxcyc=100
+fi
+
 cat > 01_min.in << EOF
 #NVT MD w/No position restraints and PME (sander)
 
  &cntrl
   imin   = 1,
-  maxcyc = 20000,
+  maxcyc = $maxcyc,
   ntmin  = 2,
   ntpr   = 1000,
   ntwx   = 1000,
@@ -81,7 +87,7 @@ cat > 02_min.in << EOF
 
  &cntrl
   imin   = 1,
-  maxcyc = 20000,
+  maxcyc = $maxcyc,
   ntmin  = 2,
   ntpr   = 1000,
   ntwx   = 1000,
@@ -113,7 +119,7 @@ cat > 03_min.in << EOF
 
  &cntrl
   imin   = 1,
-  maxcyc = 20000,
+  maxcyc = $maxcyc,
   ntmin  = 2,
   ntpr   = 1000,
   ntwx   = 1000,
@@ -145,7 +151,7 @@ cat > 04_min.in << EOF
 
  &cntrl
   imin   = 1,
-  maxcyc = 20000,
+  maxcyc = $maxcyc,
   ntmin  = 2,
   ntpr   = 1000,
   ntwx   = 1000,
@@ -177,7 +183,7 @@ cat > 05_min.in << EOF
 
  &cntrl
   imin   = 1,
-  maxcyc = 20000,
+  maxcyc = $maxcyc,
   ntmin  = 2,
   ntpr   = 1000,
   ntwx   = 1000,
@@ -200,6 +206,12 @@ cat > 05_min.in << EOF
  /  
 EOF
 
+nstlim=500000
+
+if [ $test = "YES" ]; then
+nstlim=100
+fi
+
 cat > 06_heat.in << EOF
 NVT MD w/No position restraints and PME (sander)
  &cntrl
@@ -217,7 +229,7 @@ NVT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10, !determines the frequency of non-bonded list updates when igb=0 and nbflag=0
 
-  nstlim = 500000, 
+  nstlim = $nstlim, 
   t      = 0.0,
   nscm   = 1000, !Flag for the removal of translational and rotational center-of-mass (COM) motion at regular intervals (default is 1000)
   dt     = 0.002,
@@ -257,7 +269,7 @@ NVT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10, !determines the frequency of non-bonded list updates when igb=0 and nbflag=0
 
-  nstlim = 500000, 
+  nstlim = $nstlim, 
   t      = 0.0,
   nscm   = 1000, !Flag for the removal of translational and rotational center-of-mass (COM) motion at regular intervals (default is 1000)
   dt     = 0.002,
@@ -276,13 +288,21 @@ NVT MD w/No position restraints and PME (sander)
  /
 EOF
 
+ntwx=10000
+nstlim=5000000
+
+if [ $test = "YES" ]; then
+ntwx=100
+nstlim=100
+fi
+
 cat > 08_equi.in << EOF
 NPT MD w/No position restraints and PME (sander)
  &cntrl
   ntx    = 5,
   irest  = 1,
   ntpr   = 10000,
-  ntwx   = 10000,
+  ntwx   = $ntwx,
   ntwe   = 10000,
   ntwr   = 10000,
   ig     = -1,
@@ -294,7 +314,7 @@ NPT MD w/No position restraints and PME (sander)
   iwrap  = 1,
   nsnb   = 10,
 
-  nstlim = 5000000,
+  nstlim = $nstlim,
   t      = 0.0,
   nscm   = 1000,
   dt     = 0.002,
