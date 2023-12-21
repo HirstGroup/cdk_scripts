@@ -201,6 +201,7 @@ def create_resp3_file(infile, outfile1, outfile2, auxfile, resname):
 
     with open(infile) as f:
         lines = f.read().splitlines()
+        lines = [i for i in lines if i.strip()]
         last_line = lines[-1]
 
     assert 'Normal termination' in last_line

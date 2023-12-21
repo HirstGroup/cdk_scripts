@@ -49,9 +49,11 @@ def generate_mol2_row(row):
 
     for x, smi in enumerate(row['stereoisomers_list'].split('&')):
 
-        generate_3d_sdf(smi, '%s-%s-3d.sdf' %(row['Row'], x+1))
+        ligname = row['resname_list'].split('&')[x]
 
-        protonate_mol2('%s-%s-3d.sdf' %(row['Row'], x+1), '%s-%s.mol2' %(row['Row'], x+1))
+        generate_3d_sdf(smi, '%s-3d.sdf' %ligname )
+
+        protonate_mol2('%s-3d.sdf' %ligname, '%s.mol2' %ligname )
 
 
 def split_sdf(input, max_n=None):
@@ -104,7 +106,7 @@ def dock(ligname):
     os.system(cmd)
 
 
-def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat='', seed=None):
+def dock_conf(ligname, folder_in, folder_out, autobox_ligand='rc8.pdb', exhaustiveness=100, repeat='', receptor='6td3_protein.pdb', seed=None):
     """
     Dock molecule generating conformers for cycles using OpenEye (gnina does not generate conformers for cycles)
 
@@ -116,8 +118,16 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat='', see
         folder where input file is located
     folder_out:
         folder where output files will be written to
+    autobox_ligand : str, optional
+        name of ligand file to use for autobox
     exhaustiveness : int, optional
         exhaustiveness to do docking calculation
+    repeat : str, optional
+        repeat pattern
+    receptor : str, optional
+        name of receptor PDB file to dock into
+    seed : int, optional
+        seed number
 
     Returns
     -------
@@ -145,7 +155,7 @@ def dock_conf(ligname, folder_in, folder_out, exhaustiveness=100, repeat='', see
 
     # dock individual SDF files
     for i in range(n_files):
-        run(f'gnina -r 6td3_protein.pdb -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand rc8.pdb --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock{repeat}.sdf --log {folder_out}/{ligname}_confs_{i}_dock{repeat}.out {exhaustiveness} {seed}')
+        run(f'gnina -r {receptor} -l {folder_out}/{ligname}_confs_{i}.sdf --autobox_ligand {autobox_ligand} --autobox_add 8 -o {folder_out}/{ligname}_confs_{i}_dock{repeat}.sdf --log {folder_out}/{ligname}_confs_{i}_dock{repeat}.out {exhaustiveness} {seed}')
 
 
     # get lowest energy docking conformation
@@ -408,7 +418,7 @@ if __name__ == '__main__':
 
     #df.sort_values(by='Row', inplace=True)
 
-    #df = df.loc[df['Covalent'] == False]
+    df = df.loc[df['Covalent'] == True]
 
     #df.dropna(inplace=True, subset=['CDK12 Mean IC50 (uM)'])
 

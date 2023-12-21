@@ -11,7 +11,7 @@ import argparse
 
 from sklearn.metrics import r2_score
 
-parser = argparse.ArgumentParser(description='')
+parser = argparse.ArgumentParser(description='Plot data')
 
 # Required arguments
 parser.add_argument('-i','--input', help='Input File', required=True)
