@@ -299,8 +299,8 @@ fi
 cat > 08_equi.in << EOF
 NPT MD w/No position restraints and PME (sander)
  &cntrl
-  ntx    = 1,
-  irest  = 0,
+  ntx    = 5,
+  irest  = 1,
   ntpr   = 10000,
   ntwx   = $ntwx,
   ntwe   = 10000,
@@ -332,4 +332,10 @@ NPT MD w/No position restraints and PME (sander)
  / 
 EOF
 
-pmemd.cuda -O -i 08_equi.in -c ${complex}${repeat}_heat2.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_equi.out -r ${complex}${repeat}_equi.rst7 -x ${complex}${repeat}_equi.nc -l ${complex}${repeat}_equi.log
+pmemd.cuda -O -i 01_min.in -c ${complex}.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min1.out -r ${complex}${repeat}_min1.rst7 -x ${complex}${repeat}_min1.nc -ref ${complex}.rst7
+pmemd.cuda -O -i 02_min.in -c ${complex}${repeat}_min1.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min2.out -r ${complex}${repeat}_min2.rst7 -x ${complex}${repeat}_min2.nc -ref ${complex}${repeat}_min1.rst7
+pmemd.cuda -O -i 03_min.in -c ${complex}${repeat}_min2.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min3.out -r ${complex}${repeat}_min3.rst7 -x ${complex}${repeat}_min3.nc -ref ${complex}${repeat}_min2.rst7
+pmemd.cuda -O -i 04_min.in -c ${complex}${repeat}_min3.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min4.out -r ${complex}${repeat}_min4.rst7 -x ${complex}${repeat}_min4.nc -ref ${complex}${repeat}_min3.rst7
+pmemd.cuda -O -i 05_min.in -c ${complex}${repeat}_min4.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_min5.out -r ${complex}${repeat}_min5.rst7 -x ${complex}${repeat}_min5.nc -ref ${complex}${repeat}_min4.rst7
+
+pmemd.cuda -O -i 06_heat.in -c ${complex}${repeat}_min5.rst7 -p ${complex}.parm7 -o ${complex}${repeat}_heat1.out -r ${complex}${repeat}_heat1.rst7 -x ${complex}${repeat}_heat1.nc -ref ${complex}${repeat}_min5.rst7
