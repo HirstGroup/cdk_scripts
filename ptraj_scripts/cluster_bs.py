@@ -101,7 +101,12 @@ def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', rep
 
     os.chdir(folder)
 
-    frames = count_frames(parm, traj, verbose=True)
+    counted_frames = count_frames(parm, traj, verbose=True) 
+
+    frames = counted_frames // interval
+
+    if counted_frames % interval > 0:
+        frames += 1
 
     mask = get_bs_mask(frames, mask, parm, traj, interval=interval)
 
