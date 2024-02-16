@@ -123,7 +123,8 @@ def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', rep
         summary summary.dat \
         info info.dat \
         cpopvtime cpopvtime.agr normframe \
-        repout {complex}_{time}_{epsilon} repfmt pdb       
+        repout {complex}_{time}_{epsilon} repfmt pdb \
+        clusterout {complex} clusterfmt netcdf      
         ''')
 
     elif method == 'hieragglo':
