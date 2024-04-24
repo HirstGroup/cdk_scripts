@@ -35,7 +35,7 @@ def test_get_bs_mask():
 
 	os.chdir('output/')
 
-	mask = get_bs_mask(2, 'L23', 'l23_strip.parm7', 'l23_equi_cent_strip.nc', interval=1)
+	mask = get_bs_mask(2, ':L23', 'l23_strip.parm7', 'l23_equi_cent_strip.nc', interval=1)
 
 	print(mask)
 
@@ -50,10 +50,16 @@ def test_cluster_bs():
 	os.system('cp input/l23_strip.parm7 output/')
 	os.system('cp input/l23_equi_cent_strip_10.nc output/l23_equi_cent_strip.nc')
 
-	os.chdir('output/')
+	os.chdir('output')
 
 	cluster_bs('l23')
 
 	os.chdir('../')
+
+test_get_range_tuple()
+
+test_get_amber_ranges()
+
+test_get_bs_mask()
 
 test_cluster_bs()

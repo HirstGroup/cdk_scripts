@@ -50,7 +50,7 @@ def get_range_tuple(resid_list):
     yield q[i], q[-1]
 
 
-def get_bs_mask(frames, mask, parm, traj, interval=1):
+def get_bs_mask(frames, mask, parm, traj, exclude=None, interval=1):
     """
     Get mask of residues in binding site
     """
@@ -62,7 +62,7 @@ def get_bs_mask(frames, mask, parm, traj, interval=1):
 
     string = textwrap.dedent(f'''\
     trajin ../{traj} 1 last {interval}
-    mask :{mask}<:4.0 maskpdb resid_4a.pdb
+    mask {mask}<:4.0 maskpdb resid_4a.pdb
     ''')
 
     with open('mask.ptraj', 'w') as f:
@@ -75,6 +75,9 @@ def get_bs_mask(frames, mask, parm, traj, interval=1):
     for frame in range(1,frames+1):
         df = np.genfromtxt(f'resid_4a.pdb.{frames}', names=None, skip_header=1, usecols=4, skip_footer=1, dtype=int)
         resid_set.update(set(df))
+
+    if exclude is not None:
+        resid_set = [i for i in resid_set if i not in exclude]
     
     amber_range = get_amber_range(resid_set, 'resid_vmd.txt')
 
@@ -83,21 +86,28 @@ def get_bs_mask(frames, mask, parm, traj, interval=1):
     return amber_range
 
 
-def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', repeat='', time='equi'):
+def cluster_bs(complex, epsilon=1.0, exclude=None, folder_name='', interval=1, mask=None, method='dbscan', parm=None, repeat='', time='equi', traj=None):
     """
     Cluster trajectory by distance to ligand in binding site
     """
 
     if mask is None:
-        mask = complex.upper()
+        mask = ':' + complex.upper()
 
-    parm = f'../{complex}_strip.parm7'
-    traj = f'../{complex}{repeat}_{time}_cent_strip.nc'
+    if parm is None:
+        parm = f'../{complex}_strip.parm7'
+    else:
+        parm = f'../{parm}'
+    if traj is None:
+        traj = f'../{complex}{repeat}_{time}_cent_strip.nc'
+    else:
+        traj = f'../{traj}'
 
-    folder = f'cluster{repeat}_{time}_{interval}_{epsilon}'
+    folder = f'cluster{folder_name}{repeat}_{time}_{interval}_{epsilon}'
 
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+    os.system(f'rm -rf {folder}')
+
+    os.makedirs(folder)
 
     os.chdir(folder)
 
@@ -108,14 +118,14 @@ def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', rep
     if counted_frames % interval > 0:
         frames += 1
 
-    mask = get_bs_mask(frames, mask, parm, traj, interval=interval)
+    bs_mask = get_bs_mask(frames, mask, parm, traj, exclude=exclude, interval=interval)
 
     if method == 'dbscan':
         string = textwrap.dedent(f'''\
         trajin {traj} 1 last {interval}
         cluster {complex} \
-        dbscan minpoints 2 epsilon {epsilon} sievetoframe \
-        rms :{mask} nofit \
+        dbscan minpoints 2 epsilon {epsilon} \
+        rms {mask},:{bs_mask} nofit \
         sieve 1 random \
         pairdist pairdist.dat \
         out cnumvtime.dat \
@@ -132,7 +142,7 @@ def cluster_bs(complex, epsilon=1.0, interval=1, mask=None, method='dbscan', rep
         trajin {traj} 1 last {interval}
         cluster {complex} \
         hieragglo epsilon {epsilon} complete epsilonplot {complex}_epsilon.dat \
-        srmsd * \
+        srmsd {mask},:{bs_mask} \
         out cnumvtime.dat \
         sil Sil \
         summary summary.dat \
@@ -165,13 +175,17 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--epsilon', type=float, help='Epsilon value to to clustering', required=True)
 
     # Optional arguments
+    parser.add_argument('--exclude', default=None, nargs='+', type=int, help='Space separated list of resids to exclude', required=False)
+    parser.add_argument('-f', '--folder_name', help='Name for folder', required=False)
     parser.add_argument('-i', '--interval', default=1, type=int, help='Interval to analyse trajectories', required=False)
     parser.add_argument('-m', '--mask', help='Mask to cluster around', required=False)
     parser.add_argument('--method', default='dbscan', help='Method used to do clustering, options are dbscan and hieragglo', required=False)
+    parser.add_argument('-p', '--parm', help='Parameter file', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
+    parser.add_argument('--traj', help='Trajectory file', required=False)
 
     args = parser.parse_args()
 
-    cluster_bs(complex=args.complex, epsilon=args.epsilon, interval=args.interval, mask=args.mask, method=args.method, repeat=args.repeat, time=args.time)
+    cluster_bs(complex=args.complex, epsilon=args.epsilon, exclude=args.exclude, folder_name=args.folder_name, interval=args.interval, mask=args.mask, method=args.method, parm=args.parm, repeat=args.repeat, time=args.time, traj=args.traj)
 
