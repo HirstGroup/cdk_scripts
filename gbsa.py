@@ -91,6 +91,7 @@ if __name__ == '__main__':
     # Optional arguments
     parser.add_argument('--cd', help='Name of directory to change into to run commands', required=False)
     parser.add_argument('-f','--functions', nargs='+', help='Function names to run', required=False)
+    parser.add_argument('-l','--ligandmask', help='Ligandmask', required=False)
     parser.add_argument('-p', '--part', default='', help='Part pattern to run second MD, etc, e.g. 2, 3', required=False)
     parser.add_argument('-r','--repeat', default='', help='Repeat pattern, e.g. _2, _3', required=False)
     parser.add_argument('--test', default='NO', help='Test run', required=False)
@@ -114,12 +115,12 @@ if __name__ == '__main__':
         print_cmd = False
 
     if args.functions is None:
-        antegbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
+        antegbsa(complex, ligandmask=args.ligandmask, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
         gbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
 
     else:
         if 'antegbsa' in args.functions:
-            antegbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
+            antegbsa(complex, ligandmask=args.ligandmask, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
         if 'gbsa' in args.functions:
             gbsa(complex, part=args.part, print_cmd=print_cmd, repeat=args.repeat)
 
