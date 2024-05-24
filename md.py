@@ -210,7 +210,7 @@ def create_resp3_file(infile, outfile1, outfile2, auxfile, resname):
 
     run(f'antechamber -i {outfile1} -fi mol2 -o {outfile2} -fo mol2 -a {auxfile} -fa mol2 -ao crd -dr no')
 
-    os.system('rm ANTECHAMBER* ATOMTYPE.INF esout punch qout QOUT')
+    os.system('rm ANTECHAMBER* ATOMTYPE.INF esout punch qout* QOUT*')
 
 
 def check_resp3_file(infile, outfile, inchikey, charge):
