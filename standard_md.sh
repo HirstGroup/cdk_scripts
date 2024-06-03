@@ -69,8 +69,6 @@ cat > 01_min.in << EOF
   iwrap  = 1,
   ioutfm = 1,
   
-  ntc=2,
-  
   ntr=1,
   restraintmask = '!(:WAT,NA,CL)',
   restraint_wt = 100.0
@@ -100,8 +98,6 @@ cat > 02_min.in << EOF
 
   iwrap  = 1,
   ioutfm = 1,
-  
-  ntc = 2,
   
   ntr = 1,
   restraintmask = '!(:WAT,NA,CL) & !@H=',
@@ -133,8 +129,6 @@ cat > 03_min.in << EOF
   iwrap  = 1,
   ioutfm = 1,
   
-  ntc = 2,
-  
   ntr = 1,
   restraintmask = '@CA,C,O,N',
   restraint_wt = 100.0
@@ -165,8 +159,6 @@ cat > 04_min.in << EOF
   iwrap  = 1,
   ioutfm = 1,
   
-  ntc = 2,
-  
   ntr = 1,
   restraintmask = '@CA,C,O',
   restraint_wt = 100.0
@@ -182,9 +174,10 @@ cat > 05_min.in << EOF
 #NVT MD w/No position restraints and PME (sander)
 
  &cntrl
-  imin   = 1,
+  imin   = 1, !Flag to run minimization, =1 ON
   maxcyc = $maxcyc,
-  ntmin  = 2,
+  ntmin  = 1, !Flag for method of minimization, =1 Steepest descent for ncyc cycles, then conjugate gradient
+  ncyc   = 1000, !minimization will be switched from steepest descent to conjugate gradient after NCYC cycles
   ntpr   = 1000,
   ntwx   = 1000,
   ntwe   = 1000,
@@ -192,17 +185,15 @@ cat > 05_min.in << EOF
 
   cut    = 12.0,
   iwrap  = 1,
-  nsnb   = 10,
+  nsnb   = 10, !Determines the frequency of nonbonded list updates when igb=0 and nbflag=0, default is 25
 
   iwrap  = 1,
   ioutfm = 1,
   
-  ntc = 2,
-  
  &end
   &ewald
-  skinnb = 2,
-  nfft1 = 96, nfft2 = 96, nfft3 = 96,
+  skinnb = 2, !Width of nonbonded "skin", default is 2 
+  nfft1 = 96, nfft2 = 96, nfft3 = 96, !Size of the charge grid
  /  
 EOF
 
