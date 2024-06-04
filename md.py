@@ -140,7 +140,7 @@ def get_inchikey(infile):
     return inchikey
 
 
-def create_resp2_file(infile, outfile, charge, cpu=1):
+def create_resp2_file(infile, outfile, charge, cpu=1, format='g09'):
     """
     Create resp2 file (ESP electrostatic potential file in Gaussian)
 
@@ -173,7 +173,7 @@ def create_resp2_file(infile, outfile, charge, cpu=1):
     with open(outfile, 'w') as f:
         f.write(string)
 
-    os.system(f'obabel -ig09 {infile} -oxyz | tail -n+3 >> {outfile}')
+    os.system(f'obabel -i{format} {infile} -oxyz | tail -n+3 >> {outfile}')
 
     with open(outfile, 'a') as f:
         f.write('\n')
