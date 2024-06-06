@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(description='Run MD ptraj and gbsa')
 parser.add_argument('-c','--complex', help='Name of complex', required=True)
 
 # Optional arguments
+parser.add_argument('-l','--ligandmask', help='Ligandmask', required=False)
 parser.add_argument('-r','--repeat', default='NO', help='Repeat pattern, e.g. _2, _3', required=False)
 parser.add_argument('-t','--test', default='NO', help='Run as a test', required=False)
 
@@ -18,6 +19,9 @@ jobid=os.popen(f'sbatch --parsable ~/scripts/1gpu.sh bash ~/cdk_scripts/standard
 
 print(f'Submitted batch job {jobid}')
 
-os.system(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh python ~/cdk_scripts/run/run_ptraj_gbsa.py -c {args.complex} -r {args.repeat}')
+if args.ligandmask is None:
+	os.system(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh python ~/cdk_scripts/run/run_ptraj_gbsa.py -c {args.complex} -r {args.repeat}')
+else:
+	os.system(f'sbatch --dependency=afterok:{jobid} ~/scripts/1cpu.sh python ~/cdk_scripts/run/run_ptraj_gbsa.py -c {args.complex} -r {args.repeat} -l {args.ligandmask}')
 
 
