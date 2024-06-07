@@ -5,9 +5,12 @@ import textwrap
 sys.path.append('../')
 from gbsa_decomp import *
 
-from compare_files import compare_files
+from tests.compare_files import compare_files
+
 
 def test_antegbsa():
+
+	os.system('rm -rf output/*')
 
 	os.system('cp input/a01.parm7 output/')
 
@@ -24,18 +27,16 @@ def test_antegbsa():
 
 def test_gbsa_decomp():
 
+	os.system('rm -rf output/*')
+
 	os.system('cp input/a01.parm7 output/')
 	os.system('cp input/a01_equi_cent_strip.nc output/')
 
 	os.chdir('output')
 
+	antegbsa('a01')
 	gbsa_decomp('a01')
 
 	os.chdir('../')
 
 	compare_files('input/a01_gbsa_decomp.dat', 'output/gbsa_decomp/a01_gbsa_decomp.dat', 1)
-
-
-
-
-test_gbsa_decomp()
