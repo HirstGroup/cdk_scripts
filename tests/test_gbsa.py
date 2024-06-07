@@ -24,6 +24,9 @@ def test_antegbsa():
 
 def test_gbsa():
 
+	os.system('cp input/a01.parm7 output/')
+	os.system('cp input/a01_equi_cent_strip.nc output/')
+
 	os.chdir('output')
 
 	gbsa('a01')
