@@ -27,7 +27,4 @@ def test_average_decomp_2():
 
 	average_decomp(input_list=['input/ADS158081_cap_reorder_gbsa_decomp.dat', 'input/ADS158081_cap_reorder_gbsa_decomp_2.dat'], output='output/ADS158081_cap_reorder_gbsa_decomp_average.csv')
 
-	#assert filecmp.cmp('output/ADS158081_cap_reorder_gbsa_decomp_average.csv', 'input/ADS158081_cap_reorder_gbsa_decomp_average.csv') is True	
-
-test_average_decomp_2()
-
+	assert filecmp.cmp('output/ADS158081_cap_reorder_gbsa_decomp_average.csv', 'input/ADS158081_cap_reorder_gbsa_decomp_average.csv') is True	
