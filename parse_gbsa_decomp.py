@@ -90,10 +90,10 @@ def average_decomp(input_list, output=None):
 	df['Total'] = df[column_names].mean(axis=1)
 	df['Total_std'] = df[column_names].std(axis=1)
 
-	print(df)
-
 	if output is not None:
 		df.to_csv(output, sep=',', index=False)
+
+	return df
 
 
 
