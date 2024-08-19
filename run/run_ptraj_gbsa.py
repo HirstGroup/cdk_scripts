@@ -17,6 +17,7 @@ parser.add_argument('-c','--complex', help='Name of complexes to run', required=
 
 # Optional arguments
 parser.add_argument('--ignore_errors', default='NO', help='Ignore errors when running system commands, i.e. continue and not crash, options YES/NO', required=False)
+parser.add_argument('-l','--ligandmask', help='Ligandmask', required=False)
 parser.add_argument('-r','--repeat', default='NO', help='Repeat pattern, e.g. _2, _3', required=False)
 parser.add_argument('--test', default='NO', help='Do test run, i.e. very short MD', required=False)
 parser.add_argument('-t', '--time', default='equi', help='Time pattern to run second MD, etc, e.g. equi, equi2', required=False)
@@ -46,6 +47,6 @@ except:
     else:
         raise Exception('Errors in delete_mds')
 
-antegbsa(args.complex, print_cmd=print_cmd, repeat=args.repeat)
+antegbsa(args.complex, ligandmask=args.ligandmask, print_cmd=print_cmd, repeat=args.repeat)
 
 gbsa(args.complex, print_cmd=print_cmd, repeat=args.repeat)
