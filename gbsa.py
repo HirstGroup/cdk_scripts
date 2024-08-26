@@ -42,7 +42,7 @@ def antegbsa(complex, ligandmask=None, part='', print_cmd=False, repeat=''):
     os.chdir('../')
 
 
-def gbsa(complex, part='', print_cmd=False, repeat=''):
+def gbsa(complex, part='', print_cmd=False, repeat='', time='equi'):
     """
     Run MMPBSA.py
 
@@ -74,7 +74,7 @@ def gbsa(complex, part='', print_cmd=False, repeat=''):
     with open('gbsa.in', 'w') as f:
         f.write(string)
 
-    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{part}{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_equi{part}_cent_strip.nc', print_cmd=print_cmd)
+    run(f'MMPBSA.py -O -i gbsa.in -o {complex}_gbsa{part}{repeat}.dat -cp {complex}-complex.parm7 -rp {complex}-receptor.parm7 -lp {complex}-ligand.parm7 -y ../{complex}{repeat}_{time}{part}_cent_strip.nc', print_cmd=print_cmd)
 
     os.system('rm *.nc.0 reference.frc')    
 
