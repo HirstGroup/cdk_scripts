@@ -161,6 +161,15 @@ def create_resp2_file(infile, outfile, charge, cpu=1, format='g09'):
 
     """
 
+    if format == 'g09':
+
+        with open(infile) as f:
+            lines = f.read().splitlines()
+            lines = [i for i in lines if i.strip()]
+            last_line = lines[-1]
+
+        assert 'Normal termination' in last_line
+
     string = textwrap.dedent(f'''\
     %nprocshared={cpu}
     #n HF 6-31G* POP(MK) IOP(6/33=2) scf=direct
